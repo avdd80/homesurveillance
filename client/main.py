@@ -31,6 +31,7 @@ def inside_pir_triggered_callback_func (channel):
     sleep (10)
     pitft.stop_stream_video_to_display ()
     pitft.Backlight (False)
+    log.print_high ('exiting inside_pir_triggered_callback')
 
 def outside_pir_triggered_callback_func(channel):
     log.print_high ('outside_pir_triggered_callback triggered')
