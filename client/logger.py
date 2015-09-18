@@ -84,7 +84,7 @@ __On_IWhite__='\033[0;107m'   # White
 class log_handler(object):
 
     # Start with log level HIGH
-    def __init__(self, enable_logging=True, log_level=3):
+    def __init__(self, enable_logging=True, log_level=7):
         '''
         Initialise class.
         '''
