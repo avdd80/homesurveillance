@@ -55,8 +55,13 @@ if __name__ == "__main__":
         sensors_obj = Sensors (inside_pir_triggered_callback_func, outside_pir_triggered_callback_func,
                           door_switch_triggered_callback_func)
         log.print_low ('Created sensors object')
-
+        i = 0
         while (True):
+            if (i == 20):
+                i = 0
+                log.print_low ('Waiting...')
+            else:
+                i = i + 1
             sleep (0.1)
 
 # Create motion service handler (stopped by default)
