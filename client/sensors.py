@@ -24,7 +24,7 @@ class Sensors(object):
         # Set GPIO values for the connected hardware
         self.__pir_inside_gpio  = 4
         self.__pir_outside_gpio = 5
-        self.__door_switch_gpio = 5
+        self.__door_switch_gpio = 6
         
         log.print_low ('Sensors: init: set inside PIR GPIO = '  + str (self.__pir_inside_gpio))
         log.print_low ('Sensors: init: set outside PIR GPIO = ' + str (self.__pir_outside_gpio))
