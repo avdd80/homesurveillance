@@ -22,7 +22,7 @@ udp_send_sock        = socket(AF_INET, SOCK_DGRAM)
 log = log_handler (True)
 log.set_log_level (log.LOG_LEVEL_LOW)
 log.print_high ('Starting...')
-log.print_low ('Started logger object')
+log.print_high ('Started logger object')
 
 # Create TFT display object
 pitft = PiTFT_Screen ()
