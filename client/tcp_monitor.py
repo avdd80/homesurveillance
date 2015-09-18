@@ -1,18 +1,27 @@
 #!/usr/bin/env python
-from subprocess import Popen, PIPE
-from logger import log_handler
-from time import sleep
-from  socket import *
+# tcp_monitor.py
+# Monitors the remote TCP port. If the TCP port is open,
+# it sends a UDP message to display_stream_launcher to
+# start listening to the stream
+from socket      import *
+from time        import sleep
+from xml_handler import XML_Object
+from subprocess  import Popen, PIPE
+from logger      import log_handler
 
 log = log_handler (True)
 log.set_log_level (log.LOG_LEVEL_LOW)
 
-REMOTE_TCP_IP_ADDR = '192.168.1.18'
-REMOTE_TCP_IP_PORT = '8080'
+xml = XML_Object ()
 
-HOST = '127.0.0.1'
-TX_PORT = 1234
-TX_ADDR = (HOST, TX_PORT)
+REMOTE_TCP_IP_ADDR = xml.get_instapush_notif_ip ()
+REMOTE_TCP_IP_PORT = xml.get_instapush_notif_port ()
+
+
+DISPLAY_STREAM_LAUNCHER_ADDR = xml.get_display_stream_launcher_ip ()
+DISPLAY_STREAM_LAUNCHER_PORT = xml.get_display_stream_launcher_port ()
+
+TX_ADDR = (DISPLAY_STREAM_LAUNCHER_ADDR, DISPLAY_STREAM_LAUNCHER_PORT)
 udp_send_sock = socket(AF_INET, SOCK_DGRAM)
 is_stream_running = False
 
