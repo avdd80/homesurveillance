@@ -57,7 +57,7 @@ class Sensors(object):
                                   GPIO.FALLING,
                                   callback=self.__inside_PIR_triggered_callback,
                                   bouncetime=300)
-        log.print_high ('InsidePIRInterrupt: Added a RISING edge event')
+        log.print_high ('InsidePIRInterrupt: Added a FALLING edge event')
 
 
     def OutsidePIRInterrupt(self,callback=None):
