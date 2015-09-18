@@ -21,19 +21,13 @@ udp_send_sock        = socket(AF_INET, SOCK_DGRAM)
 # Set log level to LOW
 log = log_handler (True)
 log.set_log_level (log.LOG_LEVEL_LOW)
-log.print_high ('Starting...')
-log.print_high ('Started logger object')
 
-# Create TFT display object
-pitft = PiTFT_Screen ()
-log.print_low ('Created TFT display object')
 
 def inside_pir_triggered_callback_func (channel):
     log.print_high ('inside_pir_triggered_callback triggered')
     udp_send_sock.sendto ('You are in front of the door', INSTAPUSH_NOTIF_ADDR)
     pitft.Backlight (True)
     pitft.stream_video_to_display ()
-    
     sleep (10)
     pitft.stop_stream_video_to_display ()
     pitft.Backlight (False)
@@ -45,16 +39,25 @@ def door_switch_triggered_callback_func(channel):
     log.print_high ('door_switch_triggered_callback triggered')
     
 
-# Create sensors object
-sensors_obj = Sensors (inside_pir_triggered_callback_func, outside_pir_triggered_callback_func,
-                  door_switch_triggered_callback_func)
-log.print_low ('Created sensors object')
+if __name__ == "__main__":
+    def main ():
+        log.print_high ('Starting...')
+        log.print_high ('Started logger object')
 
-# Start Framebuffer copy daemon
-system ('/usr/bin/fbcp &')
+        # Start Framebuffer copy daemon
+        system ('/usr/bin/fbcp &')
 
-while (True):
-    sleep (0.1)
+        # Create TFT display object
+        pitft = PiTFT_Screen ()
+        log.print_low ('Created TFT display object')
+
+        # Create sensors object
+        sensors_obj = Sensors (inside_pir_triggered_callback_func, outside_pir_triggered_callback_func,
+                          door_switch_triggered_callback_func)
+        log.print_low ('Created sensors object')
+
+        while (True):
+            sleep (0.1)
 
 # Create motion service handler (stopped by default)
 #motion_service = motion ()
