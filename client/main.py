@@ -45,7 +45,7 @@ def main ():
     log.print_high ('Started logger object')
 
     # Start Framebuffer copy daemon
-    system ('/usr/bin/fbcp &')
+#    system ('/usr/bin/fbcp &')
 
     # Create TFT display object
     pitft = PiTFT_Screen ()
