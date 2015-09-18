@@ -98,7 +98,9 @@ class PiTFT_Screen(object):
         # If the set up worked it can default to turnng light off
         # so let's turn it back on
         if self.backlightenabled:
-            self.Backlight(True)
+            self.Backlight(False)
+        else:
+            log.print_error ('Could not setup backlight')
             
         log.print_high ('PiTFT setup done')
 
