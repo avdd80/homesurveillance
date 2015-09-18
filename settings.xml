@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<data>
+    <addresses>
+        <remote_cam_server_tcp>
+            <ip>192.168.1.2</ip>
+            <port>8080</port>
+        </remote_cam_server_tcp>
+        <instapush_notif_udp>
+            <ip>localhost</ip>
+            <port>30000</port>
+        </instapush_notif_udp>
+        <display_stream_launcher_udp>
+            <ip>localhost</ip>
+            <port>30001</port>
+        </display_stream_launcher_udp>
+    </addresses>
+</data>
