@@ -14,16 +14,16 @@ class XML_Object(object):
         return self.__address_node[0][0].text
         
     def get_remote_cam_server_port (self):
-        return self.__address_node[0][1].text
+        return int (self.__address_node[0][1].text)
 
     def get_instapush_notif_ip (self):
         return self.__address_node[1][0].text
 
     def get_instapush_notif_port (self):
-        return self.__address_node[1][1].text
+        return int (self.__address_node[1][1].text)
         
     def get_display_stream_launcher_ip (self):
         return self.__address_node[2][0].text
 
     def get_display_stream_launcher_port ():
-        return self.__address_node[2][1].text
+        return int (self.__address_node[2][1].text)
