@@ -201,7 +201,7 @@ class PiTFT_Screen(object):
         log.print_high ('pitft: stop_stream_video_to_display: Exit')
         
         
-    def start_fbcp_process ():
+    def start_fbcp_process (self):
         if (is_process_running('fbcp') == False):
             Popen ('sudo fbcp', shell=True, stdout=PIPE)
 
