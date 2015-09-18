@@ -26,11 +26,6 @@ log.set_log_level (log.LOG_LEVEL_LOW)
 pitft = PiTFT_Screen ()
 log.print_low ('Created TFT display object')
 
-def start_fbcp_process ():
-    process_list = getoutput('ps -A')
-    if ('fbcp' not in process_list):
-        system ('sudo fbcp &')
-
 def inside_pir_triggered_callback_func (channel):
     log.print_high ('inside_pir_triggered_callback triggered')
     udp_send_sock.sendto ('You are in front of the door', INSTAPUSH_NOTIF_ADDR)
@@ -54,7 +49,7 @@ def main ():
 
     # Start Framebuffer copy daemon
 #    system ('/usr/bin/fbcp &')
-    start_fbcp_process ()
+    pitft.start_fbcp_process()
 
     # Create sensors object
     sensors_obj = Sensors (inside_pir_triggered_callback_func, outside_pir_triggered_callback_func,
