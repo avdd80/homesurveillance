@@ -101,6 +101,8 @@ class log_handler(object):
         self.__LOG_LEVEL_LOW_MARKER   = 7
         self.__LOG_LEVEL_NOTE_MARKER  = 9
         
+        print 'log level set to ' + str (self.__logging_level)
+        
     def set_log_level (self, log_level):
         self.__logging_level = log_level
     
