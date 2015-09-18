@@ -35,7 +35,7 @@ log.set_log_level (log.LOG_LEVEL_LOW)
 
 def is_process_running (process_name):
     process_list = getoutput('ps -A')
-    if (('omxplayer.bin' in process_list) or ('omxplayer' in process_list)):
+    if ((process_name in process_list) or (process_name in process_list)):
         return True
     else:
         return False
@@ -176,11 +176,12 @@ class PiTFT_Screen(object):
         log.print_high ('Starting omxplayer')
         Popen('/usr/bin/omxplayer --live --fps 10 http://' + str (tcp_ip) + ':' + str (tcp_port) + '/?action=stream', shell=True, stdout=PIPE)
         sleep (0.1)
-        while ((is_process_running ('omxplayer.bin') == False) and (timeout > 0)):
+        # Check if the process is running. If not, restart the process
+        while (((is_process_running ('omxplayer.bin') == False) and (is_process_running ('omxplayer') == False)) and (timeout > 0)):
             Popen('/usr/bin/omxplayer --live --fps 10 http://' + str (tcp_ip) + ':' + str (tcp_port) + '/?action=stream', shell=True, stdout=PIPE)
             timeout = timeout - 1
             log.print_high ('Starting omxplayer. Number retries left: ' + str(timeout))
-            sleep (1)
+            sleep (0.5)
         log.print_high ('pitft: stream_video_to_display: Exit')
             
     def stop_stream_video_to_display (self):
