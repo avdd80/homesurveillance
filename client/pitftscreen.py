@@ -175,6 +175,7 @@ class PiTFT_Screen(object):
         timeout = 10
         log.print_high ('Starting omxplayer')
         Popen('/usr/bin/omxplayer --live --fps 10 http://' + str (tcp_ip) + ':' + str (tcp_port) + '/?action=stream', shell=True, stdout=PIPE)
+        print '/usr/bin/omxplayer --live --fps 10 http://' + str (tcp_ip) + ':' + str (tcp_port) + '/?action=stream'
         sleep (0.1)
         # Check if the process is running. If not, restart the process
         while (((is_process_running ('omxplayer.bin') == False) and (is_process_running ('omxplayer') == False)) and (timeout > 0)):
