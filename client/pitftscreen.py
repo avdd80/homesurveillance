@@ -35,7 +35,7 @@ log.set_log_level (log.LOG_LEVEL_LOW)
 
 def is_process_running (process_name):
     process_list = getoutput('ps -A')
-    if ((process_name in process_list) or (process_name in process_list)):
+    if (process_name in process_list):
         return True
     else:
         return False
@@ -199,6 +199,11 @@ class PiTFT_Screen(object):
             log.print_high ('Killing omxplayer. Number retries left: ' + str(timeout))
             sleep (0.2)
         log.print_high ('pitft: stop_stream_video_to_display: Exit')
+        
+        
+    def start_fbcp_process ():
+        if (is_process_running('fbcp') == False):
+            Popen ('sudo fbcp', shell=True, stdout=PIPE)
 
 
     # Include the GPIO cleanup method
