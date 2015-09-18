@@ -126,17 +126,16 @@ class PiTFT_Screen(object):
         '''
         log.print_high ('Inside backlight light = ' + str (light))
         
-        if self.backlightenabled:
 
-            if (light):
-                log.print_low ('pitft: Backlight: Turning on display')
-                #system ('sudo sh -c ''echo 1 > /sys/class/gpio/gpio508/value''')
-                system ('sudo sh -c ''./display_on.sh''')
+        if (light):
+            log.print_low ('pitft: Backlight: Turning on display')
+            #system ('sudo sh -c ''echo 1 > /sys/class/gpio/gpio508/value''')
+            system ('sudo sh -c ''./display_on.sh''')
 
-            else:
-                log.print_low ('pitft: Backlight: Turning off display')
-                #system ('sudo sh -c ''echo 0 > /sys/class/gpio/gpio508/value''')
-                system ('sudo sh -c ''./display_off.sh''')
+        else:
+            log.print_low ('pitft: Backlight: Turning off display')
+            #system ('sudo sh -c ''echo 0 > /sys/class/gpio/gpio508/value''')
+            system ('sudo sh -c ''./display_off.sh''')
 
 
     # Add interrupt handling...
@@ -169,6 +168,7 @@ class PiTFT_Screen(object):
                                   bouncetime=bouncetime)
 
     def stream_video_to_display (self):
+        log.print_high ('pitft: stream_video_to_display: Entered')
         xml = XML_Object ()
         tcp_ip   = xml.get_remote_cam_server_ip ()
         tcp_port = xml.get_remote_cam_server_port ()
@@ -181,8 +181,10 @@ class PiTFT_Screen(object):
             timeout = timeout - 1
             log.print_high ('Starting omxplayer. Number retries left: ' + str(timeout))
             sleep (1)
+        log.print_high ('pitft: stream_video_to_display: Exit')
             
     def stop_stream_video_to_display (self):
+        log.print_high ('pitft: stop_stream_video_to_display: Entered')
         timeout = 10
         log.print_high ('Killing omxplayer')
         Popen ('sudo pkill omxplayer'    , shell=True, stdout=PIPE)
@@ -194,6 +196,7 @@ class PiTFT_Screen(object):
             timeout = timeout - 1
             log.print_high ('Killing omxplayer. Number retries left: ' + str(timeout))
             sleep (0.2)
+        log.print_high ('pitft: stop_stream_video_to_display: Exit')
 
 
     # Include the GPIO cleanup method
