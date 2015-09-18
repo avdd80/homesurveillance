@@ -22,6 +22,10 @@ udp_send_sock        = socket(AF_INET, SOCK_DGRAM)
 log = log_handler (True)
 log.set_log_level (log.LOG_LEVEL_LOW)
 
+# Create TFT display object
+pitft = PiTFT_Screen ()
+log.print_low ('Created TFT display object')
+
 
 def inside_pir_triggered_callback_func (channel):
     log.print_high ('inside_pir_triggered_callback triggered')
@@ -46,10 +50,6 @@ def main ():
 
     # Start Framebuffer copy daemon
 #    system ('/usr/bin/fbcp &')
-
-    # Create TFT display object
-    pitft = PiTFT_Screen ()
-    log.print_low ('Created TFT display object')
 
     # Create sensors object
     sensors_obj = Sensors (inside_pir_triggered_callback_func, outside_pir_triggered_callback_func,
