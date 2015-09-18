@@ -40,30 +40,32 @@ def door_switch_triggered_callback_func(channel):
     log.print_high ('door_switch_triggered_callback triggered')
     
 
+def main ():
+    log.print_high ('Starting...')
+    log.print_high ('Started logger object')
+
+    # Start Framebuffer copy daemon
+    system ('/usr/bin/fbcp &')
+
+    # Create TFT display object
+    pitft = PiTFT_Screen ()
+    log.print_low ('Created TFT display object')
+
+    # Create sensors object
+    sensors_obj = Sensors (inside_pir_triggered_callback_func, outside_pir_triggered_callback_func,
+                      door_switch_triggered_callback_func)
+    log.print_low ('Created sensors object')
+    i = 0
+    while (True):
+        if (i == 20):
+            i = 0
+            log.print_low ('Waiting...')
+        else:
+            i = i + 1
+        sleep (0.1)
+
 if __name__ == "__main__":
-    def main ():
-        log.print_high ('Starting...')
-        log.print_high ('Started logger object')
-
-        # Start Framebuffer copy daemon
-        system ('/usr/bin/fbcp &')
-
-        # Create TFT display object
-        pitft = PiTFT_Screen ()
-        log.print_low ('Created TFT display object')
-
-        # Create sensors object
-        sensors_obj = Sensors (inside_pir_triggered_callback_func, outside_pir_triggered_callback_func,
-                          door_switch_triggered_callback_func)
-        log.print_low ('Created sensors object')
-        i = 0
-        while (True):
-            if (i == 20):
-                i = 0
-                log.print_low ('Waiting...')
-            else:
-                i = i + 1
-            sleep (0.1)
+    main ()
 
 # Create motion service handler (stopped by default)
 #motion_service = motion ()
