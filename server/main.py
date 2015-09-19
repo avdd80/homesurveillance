@@ -33,7 +33,7 @@ log.print_low ('Created camera object')
 def inside_pir_triggered_callback_func (channel):
     log.print_high ('inside_pir_triggered_callback triggered')
     udp_send_sock.sendto ('You are in front of the door', INSTAPUSH_NOTIF_ADDR)
-    cam.start_camera ('320x240', '4', 'night')
+    cam.start_camera ('320x240', '5', 'night')
     pitft.Backlight (True)
     pitft.stream_video_to_display ()
     sleep (30)

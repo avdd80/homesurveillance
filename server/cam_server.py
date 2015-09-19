@@ -57,7 +57,7 @@ class Cam_Object:
         timeout = 10
         while ((is_process_running ('mjpg_streamer') == False) and (timeout > 0)):
 
-            Popen(cam_start_shell_cmd, shell=True, stdout=PIPE)
+            Popen(start_cam_script, shell=True, stdout=PIPE)
             timeout = timeout - 1
             log.print_high ('Starting camera. Number retries left: ' + str(timeout))
             sleep (2)
