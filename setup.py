@@ -15,8 +15,8 @@ system ('sudo chmod +x server/main.py')
 system ('sudo chmod +x client/display_stream_launcher.py')
 
 # Start client processes
-Popen ('client/display_stream_launcher.py' , shell=True, stdout=PIPE)
+#Popen ('client/display_stream_launcher.py' , shell=True, stdout=PIPE)
 
 # Start server processes
-Popen ('server/instapush_notif.py'    , shell=True, stdout=PIPE)
-Popen ('server/main.py'               , shell=True, stdout=PIPE)
+#Popen ('server/instapush_notif.py'    , shell=True, stdout=PIPE)
+#Popen ('server/main.py'               , shell=True, stdout=PIPE)
