@@ -51,7 +51,7 @@ class Cam_Object:
             start_cam_script = start_cam_script + exposure_mode
 
         log.print_high ('Running camera script:\n' + start_cam_script)
-        Popen(script_path, shell=True, stdout=PIPE)
+        Popen(start_cam_script, shell=True, stdout=PIPE)
         sleep (2)
         timeout = 10
         while ((is_process_running ('mjpg_streamer') == False) and (timeout > 0)):
