@@ -49,6 +49,7 @@ class Cam_Object:
         start_cam_script = start_cam_script + fps + '_'
         if (exposure_mode != ''):
             start_cam_script = start_cam_script + exposure_mode
+        start_cam_script = start_cam_script + '.sh'
 
         log.print_high ('Running camera script:\n' + start_cam_script)
         Popen(start_cam_script, shell=True, stdout=PIPE)
