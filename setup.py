@@ -3,9 +3,7 @@
 
 from os import system
 
-# Create a copy of xml_handler in server
-system ('sudo cp client/xml_handler.py server/.')
-
 # Make all scripts executable
 system ('sudo chmod +x client/scripts/*')
+system ('sudo chmod +x server/scripts/*')
 
