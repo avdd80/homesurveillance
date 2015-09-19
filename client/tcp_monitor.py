@@ -57,9 +57,6 @@ def monitor_tcp_port ():
 #| True                            | True              | No change              | Ignore                    |
 #+---------------------------------+-------------------+------------------------+---------------------------+
 
-# Let the UDP client start first
-sleep (5)
-
 while (True):
     port_status = monitor_tcp_port ()
 

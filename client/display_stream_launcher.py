@@ -36,6 +36,7 @@ udp_recv_client.setsockopt (SOL_SOCKET, SO_REUSEADDR, 1)
 udp_recv_client.bind (RX_ADDR)
 is_stream_active = False
 
+Popen ('tcp_monitor.py', shell=True, stdout=PIPE)
 
 while True:
     data = udp_recv_client.recv(BUFSIZE)

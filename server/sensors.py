@@ -3,10 +3,9 @@
 # Python script to handle sensors
 # -----------------------------------------------
 
-import RPi.GPIO as GPIO
-from os.path import exists
-from logger import log_handler
-import time
+import RPi.GPIO as     GPIO
+from   os.path  import exists
+from   logger   import log_handler
 
 log = log_handler (True)
 log.set_log_level (log.LOG_LEVEL_LOW)

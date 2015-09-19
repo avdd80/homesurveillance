@@ -10,6 +10,7 @@ from sensors     import Sensors
 from xml_handler import XML_Object
 from logger      import log_handler
 from pitftscreen import PiTFT_Screen
+from cam_server  import Cam_Object
 
 xml = XML_Object ()
 
@@ -26,14 +27,19 @@ log.set_log_level (log.LOG_LEVEL_LOW)
 pitft = PiTFT_Screen ()
 log.print_low ('Created TFT display object')
 
+cam   = Cam_Object ()
+log.print_low ('Created camera object')
+
 def inside_pir_triggered_callback_func (channel):
     log.print_high ('inside_pir_triggered_callback triggered')
     udp_send_sock.sendto ('You are in front of the door', INSTAPUSH_NOTIF_ADDR)
+    cam.start_camera ('320x240', '4', 'night')
     pitft.Backlight (True)
     pitft.stream_video_to_display ()
-    sleep (10)
+    sleep (30)
     pitft.stop_stream_video_to_display ()
     pitft.Backlight (False)
+    cam.stop_camera ()
     log.print_high ('exiting inside_pir_triggered_callback')
 
 def outside_pir_triggered_callback_func(channel):
