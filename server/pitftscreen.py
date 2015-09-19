@@ -130,12 +130,12 @@ class PiTFT_Screen(object):
         if (light):
             log.print_low ('pitft: Backlight: Turning on display')
             #system ('sudo sh -c ''echo 1 > /sys/class/gpio/gpio508/value''')
-            system ('sudo sh -c ''./scripts/display_on.sh''')
+            system ('sudo sh -c ''../scripts/display_on.sh''')
 
         else:
             log.print_low ('pitft: Backlight: Turning off display')
             #system ('sudo sh -c ''echo 0 > /sys/class/gpio/gpio508/value''')
-            system ('sudo sh -c ''./scripts/display_off.sh''')
+            system ('sudo sh -c ''../scripts/display_off.sh''')
 
 
     # Add interrupt handling...

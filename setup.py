@@ -4,6 +4,6 @@
 from os import system
 
 # Make all scripts executable
-system ('sudo chmod +x client/scripts/*')
-system ('sudo chmod +x server/scripts/*')
+system ('sudo chmod +x scripts/*')
+system ('sudo chmod +x scripts/*')
 

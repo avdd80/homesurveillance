@@ -44,7 +44,7 @@ class Cam_Object:
 	# start_cam_320x240_5_night.sh   start_cam_640x480_5_night.sh
         
 
-        start_cam_script = './script/start_cam_'
+        start_cam_script = '../scripts/start_cam_'
         start_cam_script = start_cam_script + resolution + '_'
         start_cam_script = start_cam_script + fps + '_'
         if (exposure_mode != ''):
