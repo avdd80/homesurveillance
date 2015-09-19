@@ -31,7 +31,7 @@ class Cam_Object:
         Popen ('export LD_LIBRARY_PATH=' + self.__mjpeg_streamer_root_path, shell=True, stdout=PIPE)
     
     
-    def start_camera(self, resolution='320x240', fps='4', exposure_mode):
+    def start_camera(self, resolution='320x240', fps='4', exposure_mode=''):
 
         log.print_high ('Starting camera...')
 
