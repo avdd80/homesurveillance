@@ -37,10 +37,11 @@ udp_recv_client.bind (RX_ADDR)
 is_stream_active = False
 
 
-Popen('pgrep omxplayer.bin | xargs kill', shell=True, stdout=PIPE)
+Popen ('sudo pkill omxplayer'    , shell=True, stdout=PIPE)
+Popen ('sudo pkill omxplayer.bin', shell=True, stdout=PIPE)
 omxplayer_running = False
 
-Popen ('tcp_monitor.py', shell=True, stdout=PIPE)
+Popen ('/home/pi/homesurveillance/client/tcp_monitor.py', shell=True, stdout=PIPE)
 
 while True:
     data = udp_recv_client.recv(BUFSIZE)
@@ -60,7 +61,8 @@ while True:
         #log.print_high('Just before kill, Poll = ' + display_stream_proc.poll())
         if ( (is_process_running ('omxplayer.bin')) or (is_process_running ('omxplayer')) ):
             omxplayer_running = True
-            Popen('pgrep omxplayer.bin | xargs kill', shell=True, stdout=PIPE)
+            Popen ('sudo pkill omxplayer'    , shell=True, stdout=PIPE)
+            Popen ('sudo pkill omxplayer.bin', shell=True, stdout=PIPE)
         Popen ('/opt/vc/bin/tvservice -o', shell=True, stdout=PIPE)
         is_stream_active = False
         if ( (is_process_running ('omxplayer.bin') == False) and (is_process_running ('omxplayer') == False) ):
