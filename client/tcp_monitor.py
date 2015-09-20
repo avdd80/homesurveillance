@@ -14,8 +14,8 @@ log.set_log_level (log.LOG_LEVEL_LOW)
 
 xml = XML_Object ()
 
-REMOTE_TCP_IP_ADDR = xml.get_instapush_notif_ip ()
-REMOTE_TCP_IP_PORT = xml.get_instapush_notif_port ()
+REMOTE_TCP_IP_ADDR = xml.get_cam_server_ip ()
+REMOTE_TCP_IP_PORT = xml.get_cam_server_port ()
 
 
 DISPLAY_STREAM_LAUNCHER_ADDR = xml.get_display_stream_launcher_ip ()
