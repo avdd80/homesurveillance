@@ -34,8 +34,16 @@ RX_ADDR = (DISPLAY_STREAM_LAUNCHER_ADDR, DISPLAY_STREAM_LAUNCHER_PORT)
 udp_recv_client = socket( AF_INET,SOCK_DGRAM)
 udp_recv_client.setsockopt (SOL_SOCKET, SO_REUSEADDR, 1)
 udp_recv_client.bind (RX_ADDR)
-is_stream_active = False
 
+
+def is_process_running (process_name):
+    process_list = getoutput('ps -A')
+    if (process_name in process_list):
+        return True
+    else:
+        return False
+
+is_stream_active = False
 
 Popen ('sudo pkill omxplayer'    , shell=True, stdout=PIPE)
 Popen ('sudo pkill omxplayer.bin', shell=True, stdout=PIPE)
@@ -50,7 +58,7 @@ while True:
     # streaming video
     if (data == 'LISTEN_TO_STREAM' or is_stream_active):
         Popen ('/opt/vc/bin/tvservice -p', shell=True, stdout=PIPE)
-        display_stream_proc = Popen('/usr/bin/omxplayer --live --fps 10 ' + REMOTE_TCP_IP_ADDR + ':' + REMOTE_TCP_IP_PORT +'/?action=stream', shell=True, stdout=PIPE)
+        display_stream_proc = Popen('/usr/bin/omxplayer --live --fps 10 ' + REMOTE_TCP_IP_ADDR + ':' + str (REMOTE_TCP_IP_PORT) +'/?action=stream', shell=True, stdout=PIPE)
         sleep (1)
         if ( (is_process_running ('omxplayer.bin')) or (is_process_running ('omxplayer')) ):
             omxplayer_running = True
