@@ -28,7 +28,7 @@ class XML_Object(object):
         return self.get_cam_server_ip ()
 #------------------------------------------------------#
     def get_remote_cam_server_port (self):
-        return int (self.get_cam_server_port ())
+        return self.get_cam_server_port ()
 #------------------------------------------------------#
     def get_instapush_notif_ip (self):
         return self.__address_node[1][0].text

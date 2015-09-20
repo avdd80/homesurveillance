@@ -25,8 +25,8 @@ xml = XML_Object ()
 DISPLAY_STREAM_LAUNCHER_ADDR = xml.get_display_stream_launcher_ip ()
 DISPLAY_STREAM_LAUNCHER_PORT = xml.get_display_stream_launcher_port ()
 
-REMOTE_TCP_IP_ADDR = xml.get_instapush_notif_ip ()
-REMOTE_TCP_IP_PORT = xml.get_instapush_notif_port ()
+REMOTE_TCP_IP_ADDR = xml.get_cam_server_ip ()
+REMOTE_TCP_IP_PORT = xml.get_cam_server_port ()
 
 log = log_handler (True)
 log.set_log_level (log.LOG_LEVEL_LOW)
