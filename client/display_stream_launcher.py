@@ -11,9 +11,11 @@
 
 from socket      import *
 from time        import sleep
+from commands    import getoutput
 from xml_handler import XML_Object
 from subprocess  import Popen, PIPE
 from logger      import log_handler
+
 
 log = log_handler (True)
 log.set_log_level (log.LOG_LEVEL_LOW)
@@ -49,7 +51,7 @@ Popen ('sudo pkill omxplayer'    , shell=True, stdout=PIPE)
 Popen ('sudo pkill omxplayer.bin', shell=True, stdout=PIPE)
 omxplayer_running = False
 
-Popen ('/home/pi/homesurveillance/client/tcp_monitor.py', shell=True, stdout=PIPE)
+#Popen ('/home/pi/homesurveillance/client/tcp_monitor.py', shell=True, stdout=PIPE)
 
 while True:
     data = udp_recv_client.recv(BUFSIZE)
@@ -58,7 +60,7 @@ while True:
     # streaming video
     if (data == 'LISTEN_TO_STREAM' or is_stream_active):
         Popen ('/opt/vc/bin/tvservice -p', shell=True, stdout=PIPE)
-        display_stream_proc = Popen('/usr/bin/omxplayer --live --fps 10 ' + REMOTE_TCP_IP_ADDR + ':' + str (REMOTE_TCP_IP_PORT) +'/?action=stream', shell=True, stdout=PIPE)
+        display_stream_proc = Popen('/usr/bin/omxplayer --live --fps 10 http://' + REMOTE_TCP_IP_ADDR + ':' + str (REMOTE_TCP_IP_PORT) +'/?action=stream', shell=True, stdout=PIPE)
         sleep (1)
         if ( (is_process_running ('omxplayer.bin')) or (is_process_running ('omxplayer')) ):
             omxplayer_running = True
