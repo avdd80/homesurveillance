@@ -36,7 +36,7 @@ def inside_pir_triggered_callback_func (channel):
     cam.start_camera ('320x240', '5', 'night')
     pitft.Backlight (True)
     pitft.stream_video_to_display ()
-    sleep (30)
+    sleep (120)
     pitft.stop_stream_video_to_display ()
     pitft.Backlight (False)
     cam.stop_camera ()

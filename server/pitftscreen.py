@@ -67,9 +67,13 @@ class PiTFT_Screen(object):
         self.__pin2 = 22
         self.__pin3 = 27
         self.__pin4 = 18
+        self.__omxplayer_running = False
 
         # set GPIO mode
         GPIO.setmode(GPIO.BCM)
+        
+        # Stop any instance of omxplayer already running
+        self.stop_stream_video_to_display ()
 
 
         # Initialise buttons
@@ -168,6 +172,9 @@ class PiTFT_Screen(object):
                                   bouncetime=bouncetime)
 
     def stream_video_to_display (self):
+        if (self.__omxplayer_running):
+            log.print_high ('pitft: stream_video_to_display: Omxplayer already running')
+            return
         log.print_high ('pitft: stream_video_to_display: Entered')
         xml = XML_Object ()
         tcp_ip   = xml.get_remote_cam_server_ip ()
@@ -183,6 +190,9 @@ class PiTFT_Screen(object):
             timeout = timeout - 1
             log.print_high ('Starting omxplayer. Number retries left: ' + str(timeout))
             sleep (0.5)
+            
+        if ( (is_process_running ('omxplayer.bin') or (is_process_running ('omxplayer') ):
+            self.__omxplayer_running = True
         log.print_high ('pitft: stream_video_to_display: Exit')
             
     def stop_stream_video_to_display (self):
@@ -198,6 +208,8 @@ class PiTFT_Screen(object):
             timeout = timeout - 1
             log.print_high ('Killing omxplayer. Number retries left: ' + str(timeout))
             sleep (0.2)
+        if ( (is_process_running ('omxplayer.bin') == False) and (is_process_running ('omxplayer') == False) ):
+            self.__omxplayer_running = False
         log.print_high ('pitft: stop_stream_video_to_display: Exit')
         
         

@@ -36,6 +36,10 @@ udp_recv_client.setsockopt (SOL_SOCKET, SO_REUSEADDR, 1)
 udp_recv_client.bind (RX_ADDR)
 is_stream_active = False
 
+
+Popen('pgrep omxplayer.bin | xargs kill', shell=True, stdout=PIPE)
+omxplayer_running = False
+
 Popen ('tcp_monitor.py', shell=True, stdout=PIPE)
 
 while True:
@@ -46,13 +50,20 @@ while True:
     if (data == 'LISTEN_TO_STREAM' or is_stream_active):
         Popen ('/opt/vc/bin/tvservice -p', shell=True, stdout=PIPE)
         display_stream_proc = Popen('/usr/bin/omxplayer --live --fps 10 ' + REMOTE_TCP_IP_ADDR + ':' + REMOTE_TCP_IP_PORT +'/?action=stream', shell=True, stdout=PIPE)
+        sleep (1)
+        if ( (is_process_running ('omxplayer.bin')) or (is_process_running ('omxplayer')) ):
+            omxplayer_running = True
         #log.print_high('Poll = ' + display_stream_proc.poll())
 
     # This message is received locally when the remote TCP port is closed
     elif (data == 'STOP_LISTENING_TO_STREAM'):
         #log.print_high('Just before kill, Poll = ' + display_stream_proc.poll())
-        Popen('pgrep omxplayer.bin | xargs kill', shell=True, stdout=PIPE)
+        if ( (is_process_running ('omxplayer.bin')) or (is_process_running ('omxplayer')) ):
+            omxplayer_running = True
+            Popen('pgrep omxplayer.bin | xargs kill', shell=True, stdout=PIPE)
         Popen ('/opt/vc/bin/tvservice -o', shell=True, stdout=PIPE)
         is_stream_active = False
+        if ( (is_process_running ('omxplayer.bin') == False) and (is_process_running ('omxplayer') == False) ):
+            omxplayer_running = False
 
     sleep (0.5)
