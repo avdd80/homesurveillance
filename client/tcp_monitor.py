@@ -32,7 +32,7 @@ def monitor_tcp_port ():
     is_tcp_port_open = False
 
     # Listen to the remote TCP port.
-    monitor_proc = Popen('/bin/nc -z  ' + REMOTE_TCP_IP_ADDR + ' ' + REMOTE_TCP_IP_PORT +'; echo $?', shell=True, stdout=PIPE)
+    monitor_proc = Popen('/bin/nc -z  ' + REMOTE_TCP_IP_ADDR + ' ' + str(REMOTE_TCP_IP_PORT) +'; echo $?', shell=True, stdout=PIPE)
     (stdout, stderr) = monitor_proc.communicate()
     log.print_notes (stdout)
 

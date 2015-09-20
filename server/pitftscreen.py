@@ -191,7 +191,7 @@ class PiTFT_Screen(object):
             log.print_high ('Starting omxplayer. Number retries left: ' + str(timeout))
             sleep (0.5)
             
-        if ( (is_process_running ('omxplayer.bin') or (is_process_running ('omxplayer') ):
+        if ( is_process_running ('omxplayer.bin') or is_process_running ('omxplayer') ):
             self.__omxplayer_running = True
         log.print_high ('pitft: stream_video_to_display: Exit')
             
@@ -199,9 +199,10 @@ class PiTFT_Screen(object):
         log.print_high ('pitft: stop_stream_video_to_display: Entered')
         timeout = 10
         log.print_high ('Killing omxplayer')
-        Popen ('sudo pkill omxplayer'    , shell=True, stdout=PIPE)
-        Popen ('sudo pkill omxplayer.bin', shell=True, stdout=PIPE)
-        sleep (0.1)
+        if ( is_process_running ('omxplayer.bin') or is_process_running ('omxplayer') ):
+            Popen ('sudo pkill omxplayer'    , shell=True, stdout=PIPE)
+            Popen ('sudo pkill omxplayer.bin', shell=True, stdout=PIPE)
+            sleep (0.1)
         while (((is_process_running ('omxplayer.bin') == True) or (is_process_running ('omxplayer') == True)) and timeout > 0):
             Popen ('sudo pkill omxplayer', shell=True, stdout=PIPE)
             Popen ('sudo pkill omxplayer.bin', shell=True, stdout=PIPE)
