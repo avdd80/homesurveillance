@@ -13,6 +13,7 @@ system ('sudo chmod +x server/instapush_notif.py')
 system ('sudo chmod +x server/main.py')
 
 system ('sudo chmod +x client/display_stream_launcher.py')
+system ('sudo chmod +x client/tcp_monitor.py')
 
 # Start client processes
 #Popen ('client/display_stream_launcher.py' , shell=True, stdout=PIPE)
