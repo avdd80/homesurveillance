@@ -28,7 +28,9 @@ DISPLAY_STREAM_LAUNCHER_PORT = xml.get_display_stream_launcher_port ()
 REMOTE_TCP_IP_ADDR = xml.get_cam_server_ip ()
 REMOTE_TCP_IP_PORT = xml.get_cam_server_port ()
 
-DISPLAY_TYPE = xml.get_client_display_type ()
+# This number is different for every client
+MY_CLIENT_NUMBER = 0
+DISPLAY_TYPE = xml.get_client_display_type (MY_CLIENT_NUMBER)
 
 del xml
 
