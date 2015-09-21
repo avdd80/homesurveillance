@@ -181,12 +181,12 @@ class PiTFT_Screen(object):
         tcp_port = xml.get_remote_cam_server_port ()
         timeout = 10
         log.print_high ('Starting omxplayer')
-        Popen('/usr/bin/omxplayer --live --fps 10 http://' + str (tcp_ip) + ':' + str (tcp_port) + '/?action=stream', shell=True, stdout=PIPE)
-        print '/usr/bin/omxplayer --live --fps 10 http://' + str (tcp_ip) + ':' + str (tcp_port) + '/?action=stream'
+        Popen('/usr/bin/omxplayer --live --no-keys --fps 10 http://' + str (tcp_ip) + ':' + str (tcp_port) + '/?action=stream', shell=True, stdout=PIPE)
+        print '/usr/bin/omxplayer --live --no-keys --fps 10 http://' + str (tcp_ip) + ':' + str (tcp_port) + '/?action=stream'
         sleep (0.1)
         # Check if the process is running. If not, restart the process
         while (((is_process_running ('omxplayer.bin') == False) and (is_process_running ('omxplayer') == False)) and (timeout > 0)):
-            Popen('/usr/bin/omxplayer --live --fps 10 http://' + str (tcp_ip) + ':' + str (tcp_port) + '/?action=stream', shell=True, stdout=PIPE)
+            Popen('/usr/bin/omxplayer --live --no-keys --fps 10 http://' + str (tcp_ip) + ':' + str (tcp_port) + '/?action=stream', shell=True, stdout=PIPE)
             timeout = timeout - 1
             log.print_high ('Starting omxplayer. Number retries left: ' + str(timeout))
             sleep (0.5)

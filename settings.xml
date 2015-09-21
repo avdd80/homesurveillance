@@ -46,6 +46,7 @@
                 <ip>192.168.1.11</ip>
                 <port>30011</port>
             </client0_listener_udp_address>
+            <client0_display_type>PI_7_0_TOUCHSCREEN</client0_display_type>
         </clients>
     </addresses>
     <path>

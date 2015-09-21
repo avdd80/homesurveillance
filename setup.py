@@ -16,6 +16,9 @@ system ('sudo chmod +x client/display_stream_launcher.py')
 system ('sudo chmod +x client/tcp_monitor.py')
 system ('sudo chmod +x client/early_server_monitor.py')
 
+# Set the correct timezone
+system ('sudo ln -sf /usr/share/zoneinfo/America/Los_Angeles /etc/localtime')
+
 # Start client processes
 #Popen ('client/display_stream_launcher.py' , shell=True, stdout=PIPE)
 

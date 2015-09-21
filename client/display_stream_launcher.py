@@ -28,6 +28,8 @@ DISPLAY_STREAM_LAUNCHER_PORT = xml.get_display_stream_launcher_port ()
 REMOTE_TCP_IP_ADDR = xml.get_cam_server_ip ()
 REMOTE_TCP_IP_PORT = xml.get_cam_server_port ()
 
+DISPLAY_TYPE = xml.get_client_display_type ()
+
 del xml
 
 log = log_handler (True)
@@ -62,12 +64,13 @@ while True:
     # This message is received locally when the remote TCP port starts
     # streaming video
     if (data == 'LISTEN_TO_STREAM' or is_stream_active):
-        Popen ('/opt/vc/bin/tvservice -p', shell=True, stdout=PIPE)
+        if (DISPLAY_TYPE == 'HDMI'):
+            Popen ('/opt/vc/bin/tvservice -p', shell=True, stdout=PIPE)
         
         # Start omxplayer only if it is not already running to avoid opening multiple
         # instances
         if (not omxplayer_running):
-            display_stream_proc = Popen('/usr/bin/omxplayer --live --fps 10 http://' + REMOTE_TCP_IP_ADDR + ':' + str (REMOTE_TCP_IP_PORT) +'/?action=stream', shell=True, stdout=PIPE)
+            display_stream_proc = Popen('/usr/bin/omxplayer --live --no-keys --fps 10 http://' + REMOTE_TCP_IP_ADDR + ':' + str (REMOTE_TCP_IP_PORT) +'/?action=stream', shell=True, stdout=PIPE)
             sleep (1)
         if ( (is_process_running ('omxplayer.bin')) or (is_process_running ('omxplayer')) ):
             omxplayer_running = True
@@ -79,7 +82,9 @@ while True:
             omxplayer_running = True
             Popen ('sudo pkill omxplayer'    , shell=True, stdout=PIPE)
             Popen ('sudo pkill omxplayer.bin', shell=True, stdout=PIPE)
-        Popen ('/opt/vc/bin/tvservice -o', shell=True, stdout=PIPE)
+        if (DISPLAY_TYPE == 'HDMI'):
+            Popen ('/opt/vc/bin/tvservice -o', shell=True, stdout=PIPE)
+        
         is_stream_active = False
         if ( (is_process_running ('omxplayer.bin') == False) and (is_process_running ('omxplayer') == False) ):
             omxplayer_running = False
