@@ -45,7 +45,7 @@ class Cam_Object:
             CLIENT_LISTNER_UDP_IP   = xml.get_client_ip   (i)
             CLIENT_LISTNER_UDP_PORT = xml.get_client_port (i)
             CLIENT_ADDR = (CLIENT_LISTNER_UDP_IP, CLIENT_LISTNER_UDP_PORT)
-            udp_send_sock.sendto ('You are in front of the door', CLIENT_ADDR)
+            udp_send_sock.sendto ('LISTEN_TO_STREAM', CLIENT_ADDR)
         del xml
 
     def start_camera(self, resolution='320x240', fps='4', exposure_mode=''):
