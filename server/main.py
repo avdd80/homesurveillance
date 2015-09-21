@@ -5,7 +5,6 @@
 
 from socket      import *
 from time        import sleep
-from os          import system
 from sensors     import Sensors
 from xml_handler import XML_Object
 from logger      import log_handler
@@ -78,7 +77,7 @@ def main ():
     log.print_low ('Created sensors object')
     i = 0
     while (True):
-        if (i == 20):
+        if (i == 100):
             i = 0
             log.print_low ('Waiting...')
         else:

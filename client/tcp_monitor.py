@@ -37,10 +37,18 @@ def monitor_tcp_port ():
     (stdout, stderr) = monitor_proc.communicate()
     log.print_notes (stdout)
 
+    i = 100
     # If the TCP port is open, send a UDP message locally to start listening to the stream
     if (int (stdout) == 0):
         log.print_high ('TCP Port opened')
         is_tcp_port_open = True
+    else:
+        if (i == 0):
+            Popen('ping -c 1' + REMOTE_TCP_IP_ADDR, shell=True, stdout=PIPE)
+            i = 100
+        else:
+            i = i - 1
+        
 
     # Return True if a stream is running
     return is_tcp_port_open
