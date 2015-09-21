@@ -60,14 +60,14 @@ class XML_Object(object):
         return int (self.__misc_node[0].text)
 #------------------------------------------------------#
     def get_client_ip (self, client_number):
-        if (client_number < self.get_client_count ())
+        if (client_number < self.get_client_count ()):
             return self.__clients_node[0][0].text
         else:
             print 'Specified client number ' + str (client_number) + ' exceeds registered number of clients = ' + str (self.get_client_count ())
             exit ()
 #------------------------------------------------------#
     def get_client_port (self, client_number):
-        if (client_number < self.get_client_count ())
+        if (client_number < self.get_client_count ()):
             return int (self.__clients_node[0][1].text)
         else:
             print 'Specified client number ' + str (client_number) + ' exceeds registered number of clients = ' + str (self.get_client_count ())
