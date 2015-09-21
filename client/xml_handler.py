@@ -54,7 +54,7 @@ class XML_Object(object):
     def get_job_scheduler_in_port (self):
         return int (self.__address_node[3][1].text)
 #------------------------------------------------------#
-#---------------------- CLIENTS -----------------------#
+#----------------- REMOTE CLIENTS ---------------------#
 #------------------------------------------------------#
     def get_client_count (self):
         return int (self.__misc_node[0].text)
@@ -69,6 +69,13 @@ class XML_Object(object):
     def get_client_port (self, client_number):
         if (client_number < self.get_client_count ()):
             return int (self.__clients_node[0][1].text)
+        else:
+            print 'Specified client number ' + str (client_number) + ' exceeds registered number of clients = ' + str (self.get_client_count ())
+            exit ()
+#------------------------------------------------------#
+    def get_client_display_type (self, client_number):
+        if (client_number < self.get_client_count ()):
+            return self.__clients_node[1].text
         else:
             print 'Specified client number ' + str (client_number) + ' exceeds registered number of clients = ' + str (self.get_client_count ())
             exit ()
