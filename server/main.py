@@ -19,6 +19,8 @@ INSTAPUSH_NOTIF_PORT = xml.get_instapush_notif_port ()
 INSTAPUSH_NOTIF_ADDR = (INSTAPUSH_NOTIF_HOST, INSTAPUSH_NOTIF_PORT)
 udp_send_sock        = socket(AF_INET, SOCK_DGRAM)
 
+del xml
+
 # Set log level to LOW
 log = log_handler (True)
 log.set_log_level (log.LOG_LEVEL_LOW)

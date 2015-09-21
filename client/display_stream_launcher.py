@@ -28,6 +28,8 @@ DISPLAY_STREAM_LAUNCHER_PORT = xml.get_display_stream_launcher_port ()
 REMOTE_TCP_IP_ADDR = xml.get_cam_server_ip ()
 REMOTE_TCP_IP_PORT = xml.get_cam_server_port ()
 
+del xml
+
 log = log_handler (True)
 log.set_log_level (log.LOG_LEVEL_LOW)
 
@@ -47,6 +49,7 @@ def is_process_running (process_name):
 
 is_stream_active = False
 
+# Kill any spurious instances of omxplayer
 Popen ('sudo pkill omxplayer'    , shell=True, stdout=PIPE)
 Popen ('sudo pkill omxplayer.bin', shell=True, stdout=PIPE)
 omxplayer_running = False
@@ -60,11 +63,14 @@ while True:
     # streaming video
     if (data == 'LISTEN_TO_STREAM' or is_stream_active):
         Popen ('/opt/vc/bin/tvservice -p', shell=True, stdout=PIPE)
-        display_stream_proc = Popen('/usr/bin/omxplayer --live --fps 10 http://' + REMOTE_TCP_IP_ADDR + ':' + str (REMOTE_TCP_IP_PORT) +'/?action=stream', shell=True, stdout=PIPE)
-        sleep (1)
+        
+        # Start omxplayer only if it is not already running to avoid opening multiple
+        # instances
+        if (not omxplayer_running):
+            display_stream_proc = Popen('/usr/bin/omxplayer --live --fps 10 http://' + REMOTE_TCP_IP_ADDR + ':' + str (REMOTE_TCP_IP_PORT) +'/?action=stream', shell=True, stdout=PIPE)
+            sleep (1)
         if ( (is_process_running ('omxplayer.bin')) or (is_process_running ('omxplayer')) ):
             omxplayer_running = True
-        #log.print_high('Poll = ' + display_stream_proc.poll())
 
     # This message is received locally when the remote TCP port is closed
     elif (data == 'STOP_LISTENING_TO_STREAM'):

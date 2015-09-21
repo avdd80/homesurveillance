@@ -17,11 +17,12 @@ xml = XML_Object ()
 REMOTE_TCP_IP_ADDR = xml.get_cam_server_ip ()
 REMOTE_TCP_IP_PORT = xml.get_cam_server_port ()
 
-
-DISPLAY_STREAM_LAUNCHER_ADDR = xml.get_display_stream_launcher_ip ()
+DISPLAY_STREAM_LAUNCHER_IP   = xml.get_display_stream_launcher_ip ()
 DISPLAY_STREAM_LAUNCHER_PORT = xml.get_display_stream_launcher_port ()
+DISPLAY_STREAM_LAUNCHER_ADDR = (DISPLAY_STREAM_LAUNCHER_IP, DISPLAY_STREAM_LAUNCHER_PORT)
 
-TX_ADDR = (DISPLAY_STREAM_LAUNCHER_ADDR, DISPLAY_STREAM_LAUNCHER_PORT)
+del xml
+
 udp_send_sock = socket(AF_INET, SOCK_DGRAM)
 is_stream_running = False
 
@@ -63,10 +64,10 @@ while (True):
     # Check for a change in status
     if (is_stream_running != port_status):
         if (port_status == True):
-            udp_send_sock.sendto ('LISTEN_TO_STREAM', TX_ADDR)
+            udp_send_sock.sendto ('LISTEN_TO_STREAM', DISPLAY_STREAM_LAUNCHER_ADDR)
             log.print_high ('LISTEN_TO_STREAM message sent')
             is_stream_running = True
         else:
-            udp_send_sock.sendto ('STOP_LISTENING_TO_STREAM', TX_ADDR)
+            udp_send_sock.sendto ('STOP_LISTENING_TO_STREAM', DISPLAY_STREAM_LAUNCHER_ADDR)
             log.print_high ('STOP_LISTENING_TO_STREAM message sent')
             is_stream_running = False

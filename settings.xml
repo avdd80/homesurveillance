@@ -17,9 +17,48 @@
             <ip>localhost</ip>
             <port>30002</port>
         </job_scheduler_udp>
+        <placeholder1>
+            <ip></ip>
+            <port>30003</port>
+        </placeholder1>
+        <placeholder2>
+            <ip></ip>
+            <port>30004</port>
+        </placeholder2>
+        <placeholder3>
+            <ip></ip>
+            <port>30005</port>
+        </placeholder3>
+        <placeholder4>
+            <ip></ip>
+            <port>30006</port>
+        </placeholder4>
+        <placeholder5>
+            <ip></ip>
+            <port>30007</port>
+        </placeholder5>
+        <placeholder6>
+            <ip></ip>
+            <port>30007</port>
+        </placeholder6>
+        <clients>
+            <client0_listener_udp_address>
+                <ip>192.168.1.11</ip>
+                <port>30011</port>
+            </client0_listener_udp_address>
+        </clients>
     </addresses>
     <path>
         <mjpeg_streamer_root_path>/usr/src/mjpg-streamer/mjpg-streamer-experimental/</mjpeg_streamer_root_path>
         <mjpeg_streamer>/usr/src/mjpg-streamer/mjpg-streamer-experimental/mjpg_streamer</mjpeg_streamer>
     </path>
+    <root_placeholder1>
+    </root_placeholder1>
+    <root_placeholder2>
+    </root_placeholder2>
+    <root_placeholder3>
+    </root_placeholder3>
+    <misc>
+        <client_count>1</client_count>
+    </misc>
 </data>

@@ -10,6 +10,8 @@ from logger      import log_handler
 log = log_handler (True)
 log.set_log_level (log.LOG_LEVEL_LOW)
 
+udp_send_sock        = socket(AF_INET, SOCK_DGRAM)
+
 def is_process_running (process_name):
     process_list = getoutput('ps -A')
     if (process_name in process_list):
@@ -29,8 +31,23 @@ class Cam_Object:
         self.__CAM_SERVER_PORT          = str (xml.get_cam_server_port ())
         
         Popen ('export LD_LIBRARY_PATH=' + self.__mjpeg_streamer_root_path, shell=True, stdout=PIPE)
+        del xml
     
-    
+    # This function sends 10 back to back messages to the client(s)
+    # to allow them to start listening to the streams asap to reduce
+    # the client side delay
+    def early_message_to_client (self):
+        xml = XML_Object ()
+        
+        CLIENT_COUNT = xml.get_client_count ()
+        i = 0
+        while (i < CLIENT_COUNT):
+            CLIENT_LISTNER_UDP_IP   = xml.get_client_ip   (i)
+            CLIENT_LISTNER_UDP_PORT = xml.get_client_port (i)
+            CLIENT_ADDR = (CLIENT_LISTNER_UDP_IP, CLIENT_LISTNER_UDP_PORT)
+            udp_send_sock.sendto ('You are in front of the door', CLIENT_ADDR)
+        del xml
+
     def start_camera(self, resolution='320x240', fps='4', exposure_mode=''):
 
         log.print_high ('Starting camera...')
