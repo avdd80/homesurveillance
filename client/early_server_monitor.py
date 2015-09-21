@@ -23,11 +23,18 @@ xml = XML_Object ()
 MY_IP   = xml.get_client_ip   (MY_CLIENT_NUMBER)
 MY_PORT = xml.get_client_port (MY_CLIENT_NUMBER)
 MY_LISTENING_ADDR = (MY_IP, MY_PORT)
+udp_recv_client = socket( AF_INET,SOCK_DGRAM)
+udp_recv_client.setsockopt (SOL_SOCKET, SO_REUSEADDR, 1)
+udp_recv_client.bind (MY_LISTENING_ADDR)
+
 
 DISPLAY_STREAM_LAUNCHER_IP   = xml.get_display_stream_launcher_ip ()
 DISPLAY_STREAM_LAUNCHER_PORT = xml.get_display_stream_launcher_port ()
 DISPLAY_STREAM_LAUNCHER_ADDR = (DISPLAY_STREAM_LAUNCHER_IP, DISPLAY_STREAM_LAUNCHER_PORT)
 del xml
+
+
+
 
 while True:
     # Blocking call
