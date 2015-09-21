@@ -13,6 +13,10 @@
             <ip>localhost</ip>
             <port>30001</port>
         </display_stream_launcher_udp>
+        <job_scheduler_udp>
+            <ip>localhost</ip>
+            <port>30002</port>
+        </job_scheduler_udp>
     </addresses>
     <path>
         <mjpeg_streamer_root_path>/usr/src/mjpg-streamer/mjpg-streamer-experimental/</mjpeg_streamer_root_path>

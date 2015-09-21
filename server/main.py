@@ -36,6 +36,8 @@ def inside_pir_triggered_callback_func (channel):
     cam.start_camera ('320x240', '5', 'night')
     pitft.Backlight (True)
     pitft.stream_video_to_display ()
+    
+    # TODO: implement as a retriggered scheduler
     sleep (120)
     pitft.stop_stream_video_to_display ()
     pitft.Backlight (False)
@@ -44,9 +46,21 @@ def inside_pir_triggered_callback_func (channel):
 
 def outside_pir_triggered_callback_func(channel):
     log.print_high ('outside_pir_triggered_callback triggered')
+
     
 def door_switch_triggered_callback_func(channel):
     log.print_high ('door_switch_triggered_callback triggered')
+    udp_send_sock.sendto ('Door opened', INSTAPUSH_NOTIF_ADDR)
+    cam.start_camera ('320x240', '5', 'night')
+    pitft.Backlight (True)
+    pitft.stream_video_to_display ()
+
+    # TODO: implement as a retriggered scheduler
+    sleep (120)
+    pitft.stop_stream_video_to_display ()
+    pitft.Backlight (False)
+    cam.stop_camera ()
+    log.print_high ('exiting door_switch_triggered_callback triggered')
     
 
 def main ():
@@ -54,7 +68,6 @@ def main ():
     log.print_high ('Started logger object')
 
     # Start Framebuffer copy daemon
-#    system ('/usr/bin/fbcp &')
     pitft.start_fbcp_process()
 
     # Create sensors object
