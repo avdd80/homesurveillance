@@ -49,10 +49,10 @@ class XML_Object(object):
         return int (self.__address_node[2][1].text)
 #------------------------------------------------------#
 #-- JOB SCHEDULER -------------------------------------#
-    def get_job_scheduler_in_ip (self):
+    def get_job_scheduler_ip (self):
         return self.__address_node[3][0].text
 #------------------------------------------------------#
-    def get_job_scheduler_in_port (self):
+    def get_job_scheduler_port (self):
         return int (self.__address_node[3][1].text)
 #------------------------------------------------------#
 #----------------- REMOTE CLIENTS ---------------------#
