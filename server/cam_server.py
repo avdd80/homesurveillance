@@ -33,6 +33,17 @@ class Cam_Object:
         Popen ('export LD_LIBRARY_PATH=' + self.__mjpeg_streamer_root_path, shell=True, stdout=PIPE)
         del xml
     
+    # This function sets the current cam status 
+    def set_cam_status (self, new_cam_status):
+        self.__is_cam_started = new_cam_status
+        
+    def get_cam_status (self):
+        if (is_process_running ('mjpg_streamer')):
+            self.set_cam_status (True)
+        else:
+            self.set_cam_status (False)
+        return self.get_cam_status ()
+
     # This function sends 10 back to back messages to the client(s)
     # to allow them to start listening to the streams asap to reduce
     # the client side delay
@@ -50,41 +61,48 @@ class Cam_Object:
 
     def start_camera(self, resolution='320x240', fps='4', exposure_mode=''):
 
-        log.print_high ('Starting camera...')
+        # Start camera only if it is not already started
+        if (not self.get_cam_status ()):
 
-        # Available scripts
-        # start_cam_320x240_10.sh        start_cam_640x480_10.sh
-	# start_cam_320x240_10_night.sh  start_cam_640x480_10_night.sh
-	# start_cam_320x240_2.sh         start_cam_640x480_2.sh
-	# start_cam_320x240_2_night.sh   start_cam_640x480_2_night.sh
-	# start_cam_320x240_5.sh         start_cam_640x480_5.sh
-	# start_cam_320x240_5_night.sh   start_cam_640x480_5_night.sh
+            log.print_high ('Starting camera...')
+
+            # Available scripts
+            # start_cam_320x240_10.sh        start_cam_640x480_10.sh
+	    # start_cam_320x240_10_night.sh  start_cam_640x480_10_night.sh
+	    # start_cam_320x240_2.sh         start_cam_640x480_2.sh
+	    # start_cam_320x240_2_night.sh   start_cam_640x480_2_night.sh
+	    # start_cam_320x240_5.sh         start_cam_640x480_5.sh
+	    # start_cam_320x240_5_night.sh   start_cam_640x480_5_night.sh
         
 
-        start_cam_script = '../scripts/start_cam_'
-        start_cam_script = start_cam_script + resolution + '_'
-        start_cam_script = start_cam_script + fps + '_'
-        if (exposure_mode != ''):
-            start_cam_script = start_cam_script + exposure_mode
-        start_cam_script = start_cam_script + '.sh'
+            start_cam_script = '../scripts/start_cam_'
+            start_cam_script = start_cam_script + resolution + '_'
+            start_cam_script = start_cam_script + fps + '_'
+            if (exposure_mode != ''):
+                start_cam_script = start_cam_script + exposure_mode
+            start_cam_script = start_cam_script + '.sh'
 
-        log.print_high ('Running camera script:\n' + start_cam_script)
-        Popen(start_cam_script, shell=True, stdout=PIPE)
-        sleep (2)
-        timeout = 10
-        while ((is_process_running ('mjpg_streamer') == False) and (timeout > 0)):
-
+            log.print_high ('Running camera script:\n' + start_cam_script)
             Popen(start_cam_script, shell=True, stdout=PIPE)
-            timeout = timeout - 1
-            log.print_high ('Starting camera. Number retries left: ' + str(timeout))
             sleep (2)
+
+            timeout = 10
+            while ( (self.get_cam_status () == False) and (timeout > 0) ):
+
+                Popen(start_cam_script, shell=True, stdout=PIPE)
+                timeout = timeout - 1
+                log.print_high ('Starting camera. Number retries left: ' + str(timeout))
+                sleep (2)
+        else:
+            log.print_high ('Multiple triggers received. Camera already running\n' + start_cam_script)
+              
             
     def stop_camera(self):
         timeout = 10
         log.print_high ('Killing camera...')
         Popen ('sudo pkill mjpg_streamer'    , shell=True, stdout=PIPE)
         sleep (2)
-        while ((is_process_running ('mjpg_streamer') == True) and timeout > 0):
+        while ((self.get_cam_status () == True) and timeout > 0):
             Popen ('sudo pkill mjpg_streamer'    , shell=True, stdout=PIPE)
             timeout = timeout - 1
             log.print_high ('Killing mjpg_streamer. Number retries left: ' + str(timeout))
