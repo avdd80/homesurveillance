@@ -13,6 +13,8 @@ from   apscheduler.schedulers.blocking import BlockingScheduler
 log = log_handler (True)
 log.set_log_level (log.LOG_LEVEL_LOW)
 
+logging.basicConfig()
+
 class Sched_Obj:
 
     def __init__(self):
@@ -35,7 +37,6 @@ class Sched_Obj:
 	self.__cam   = Cam_Object ()
         log.print_high ('Created camera object')
 
-        logging.basicConfig()
         self.__sched = BlockingScheduler()
         self.__sched.start()        # start the scheduler
         log.print_high ('Scheduler started')
@@ -43,6 +44,8 @@ class Sched_Obj:
         # Create a dummy job and cancel it
         self.__stream_job = self.__sched.add_job(stop_streaming_cb, datetime.datetime.today () + datetime.timedelta (seconds = 5))
         self.__stream_job.cancel_job ()
+
+        log.print_high ('Scheduler init done')
 
 
     # Implemented as a callback function
