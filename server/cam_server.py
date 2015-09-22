@@ -39,10 +39,12 @@ class Cam_Object:
         
     def get_cam_status (self):
         if (is_process_running ('mjpg_streamer')):
+            log.print_high ('mjpg_streamer running')
             self.set_cam_status (True)
         else:
+            log.print_high ('mjpg_streamer not running')
             self.set_cam_status (False)
-        return self.get_cam_status ()
+        return self.__is_cam_started
 
     # This function sends 10 back to back messages to the client(s)
     # to allow them to start listening to the streams asap to reduce
@@ -59,12 +61,12 @@ class Cam_Object:
             udp_send_sock.sendto ('LISTEN_TO_STREAM', CLIENT_ADDR)
         del xml
 
-    def start_camera(self, resolution='320x240', fps='4', exposure_mode=''):
+    def start_camera(self, resolution='320x240', fps='5', exposure_mode=''):
 
         # Start camera only if it is not already started
         if (not self.get_cam_status ()):
 
-            log.print_high ('Starting camera...')
+            log.print_high ('cam_server: Starting camera...')
 
             # Available scripts
             # start_cam_320x240_10.sh        start_cam_640x480_10.sh
