@@ -107,7 +107,8 @@ class Cam_Object:
         Popen ('sudo pkill mjpg_streamer'    , shell=True, stdout=PIPE)
         sleep (2)
         while ((self.get_cam_status () == True) and timeout > 0):
-            Popen ('sudo pkill mjpg_streamer'    , shell=True, stdout=PIPE)
+            Popen ('sudo pkill mjpg_streamer', shell=True, stdout=PIPE)
             timeout = timeout - 1
             log.print_high ('Killing mjpg_streamer. Number retries left: ' + str(timeout))
             sleep (2)
+        return self.get_cam_status ()

@@ -3,13 +3,15 @@
 # Python script to co-ordinate the sensors and actions
 # ------------------------------------------------------------------------
 
-from socket      import *
-from time        import sleep
-from sensors     import Sensors
-from xml_handler import XML_Object
-from logger      import log_handler
-from pitftscreen import PiTFT_Screen
-from cam_server  import Cam_Object
+from socket        import *
+from time          import sleep
+from sensors       import Sensors
+from xml_handler   import XML_Object
+from logger        import log_handler
+from job_scheduler import Sched_Obj
+#from pitftscreen import PiTFT_Screen
+#from cam_server  import Cam_Object
+
 
 xml = XML_Object ()
 
@@ -24,36 +26,14 @@ del xml
 log = log_handler (True)
 log.set_log_level (log.LOG_LEVEL_LOW)
 
-# Create TFT display object
-pitft = PiTFT_Screen ()
-log.print_high ('Created TFT display object')
+scheduler_obj = Sched_Obj ()
 
-cam   = Cam_Object ()
-log.print_high ('Created camera object')
 
 def inside_pir_triggered_callback_func (channel):
     log.print_high ('inside_pir_triggered_callback triggered')
     udp_send_sock.sendto ('You are in front of the door', INSTAPUSH_NOTIF_ADDR)
-    log.print_high ('Starting camera')
-    if (cam.start_camera ('320x240', '5', 'night')):
-        pitft.Backlight (True)
-        log.print_high ('main: Starting stream_video_to_display...')
-        pitft.stream_video_to_display ()
-    else:
-        log.print_high ('main: Camera already on')
-    log.print_high ('Sleeping for 120 s')
-    
-    # TODO: implement as a retriggered scheduler
-    sleep (120)
-    log.print_high ('Done sleeping for 120 s. Stopping stream...')
-    pitft.stop_stream_video_to_display ()
-    log.print_high ('Stream stoppped. Turning backlight off...')
-    pitft.Backlight (False)
-    log.print_high ('Backlight off. Stopping camera...')
-    if (cam.stop_camera ()):
-        log.print_high ('main: Camera off')
-    else:
-        log.print_high ('main: Could not turn off camera')
+    scheduler_obj.schedule_start_streaming ()
+    scheduler_obj.schedule_stop_streaming (10)
     log.print_high ('exiting inside_pir_triggered_callback')
 
 def outside_pir_triggered_callback_func(channel):
@@ -63,24 +43,21 @@ def outside_pir_triggered_callback_func(channel):
 def door_switch_triggered_callback_func(channel):
     log.print_high ('door_switch_triggered_callback triggered')
     udp_send_sock.sendto ('Door opened', INSTAPUSH_NOTIF_ADDR)
-    cam.start_camera ('320x240', '5', 'night')
-    pitft.Backlight (True)
-    pitft.stream_video_to_display ()
+    #cam.start_camera ('320x240', '5', 'night')
+    #pitft.Backlight (True)
+    #pitft.stream_video_to_display ()
 
     # TODO: implement as a retriggered scheduler
     sleep (120)
-    pitft.stop_stream_video_to_display ()
-    pitft.Backlight (False)
-    cam.stop_camera ()
+    #pitft.stop_stream_video_to_display ()
+    #pitft.Backlight (False)
+    #cam.stop_camera ()
     log.print_high ('exiting door_switch_triggered_callback triggered')
     
 
 def main ():
     log.print_high ('Starting...')
     log.print_high ('Started logger object')
-
-    # Start Framebuffer copy daemon
-    pitft.start_fbcp_process()
     
     # Create sensors object
     sensors_obj = Sensors (inside_pir_triggered_callback_func, outside_pir_triggered_callback_func,
