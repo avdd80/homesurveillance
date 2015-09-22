@@ -34,15 +34,22 @@ log.print_low ('Created camera object')
 def inside_pir_triggered_callback_func (channel):
     log.print_high ('inside_pir_triggered_callback triggered')
     udp_send_sock.sendto ('You are in front of the door', INSTAPUSH_NOTIF_ADDR)
+    log.print_low ('Starting camera')
     cam.start_camera ('320x240', '5', 'night')
     pitft.Backlight (True)
+    log.print_low ('Starting stream_video_to_display')
     pitft.stream_video_to_display ()
+    log.print_low ('Sleeping for 120 s')
     
     # TODO: implement as a retriggered scheduler
     sleep (120)
+    log.print_low ('Done sleeping for 120 s. Stopping stream...')
     pitft.stop_stream_video_to_display ()
+    log.print_low ('Stream stoppped. Turning backlight off...')
     pitft.Backlight (False)
+    log.print_low ('Backlight off. Stopping camera...')
     cam.stop_camera ()
+    log.print_low ('Camera off')
     log.print_high ('exiting inside_pir_triggered_callback')
 
 def outside_pir_triggered_callback_func(channel):
