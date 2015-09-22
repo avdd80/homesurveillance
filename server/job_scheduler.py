@@ -84,14 +84,14 @@ class Sched_Obj:
     # Default schedule delay is 0 minutes
     def schedule_start_streaming (self, delay = 0):
         if (delay == 0):
-            start_streaming_cb ()
+            self.start_streaming_cb ()
         return
 
     # Default schedule delay is 4 minutes
     def schedule_stop_streaming (self, seconds_delay = 240):
         
         # Blindly cancel the job before scheduling it
-        self.__stream_job.remove_job ()
+        self.__stream_job.remove ()
         self.__stream_job = self.__sched.add_job(self.stop_streaming_cb, 'interval', seconds_delay)
         #self.__stream_job = self.__sched.add_date_job(self.stop_streaming_cb, datetime.datetime.today () + datetime.timedelta (seconds = seconds_delay))
         log.print_high ('Will turn off stream after ' + str (seconds_delay) + ' from now')
