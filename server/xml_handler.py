@@ -14,6 +14,7 @@ class XML_Object(object):
         self.__root         = self.__tree.getroot ()
         self.__address_node = self.__root[0]
         self.__path_node    = self.__root[1]
+        self.__gpio_node    = self.__root[2]
         self.__clients_node = self.__address_node
         self.__misc_node    = self.__root[5]
 
@@ -79,6 +80,17 @@ class XML_Object(object):
         else:
             print 'Specified client number ' + str (client_number) + ' exceeds registered number of clients = ' + str (self.get_client_count ())
             exit ()
+#------------------------------------------------------#
+#----------------------- GPIO -------------------------#
+#------------------------------------------------------#
+    def get_inside_pir_gpio_pin (self):
+        return int (self.__gpio_node[0].text)
+#------------------------------------------------------#
+    def get_outside_pir_gpio_pin (self):
+        return int (self.__gpio_node[1].text)
+#------------------------------------------------------#
+    def get_door_switch_gpio_pin (self):
+        return int (self.__gpio_node[2].text)
 #------------------------------------------------------#
 #------------------------------------------------------#
 #----------------------- PATHS ------------------------

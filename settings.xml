@@ -53,8 +53,11 @@
         <mjpeg_streamer_root_path>/usr/src/mjpg-streamer/mjpg-streamer-experimental/</mjpeg_streamer_root_path>
         <mjpeg_streamer>/usr/src/mjpg-streamer/mjpg-streamer-experimental/mjpg_streamer</mjpeg_streamer>
     </path>
-    <root_placeholder1>
-    </root_placeholder1>
+    <gpio_assignments>
+        <inside_pir>4</inside_pir>
+        <outside_pir>5</outside_pir>
+        <door_switch>6</door_switch>
+    </gpio_assignments>
     <root_placeholder2>
     </root_placeholder2>
     <root_placeholder3>

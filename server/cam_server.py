@@ -96,7 +96,9 @@ class Cam_Object:
                 log.print_high ('Starting camera. Number retries left: ' + str(timeout))
                 sleep (2)
         else:
-            log.print_high ('Multiple triggers received. Camera already running\n' + start_cam_script)
+            log.print_high ('Multiple triggers received. Camera already running')
+
+        return self.get_cam_status ()
               
             
     def stop_camera(self):

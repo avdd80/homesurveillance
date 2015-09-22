@@ -171,7 +171,7 @@ class PiTFT_Screen(object):
                                   callback=callback,
                                   bouncetime=bouncetime)
 
-    def stream_video_to_display (self):
+    def stream_video_to_display (self, fps = 5):
         if (self.__omxplayer_running):
             log.print_high ('pitft: stream_video_to_display: Omxplayer already running')
             return
