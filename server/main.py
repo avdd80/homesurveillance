@@ -26,30 +26,30 @@ log.set_log_level (log.LOG_LEVEL_LOW)
 
 # Create TFT display object
 pitft = PiTFT_Screen ()
-log.print_low ('Created TFT display object')
+log.print_high ('Created TFT display object')
 
 cam   = Cam_Object ()
-log.print_low ('Created camera object')
+log.print_high ('Created camera object')
 
 def inside_pir_triggered_callback_func (channel):
     log.print_high ('inside_pir_triggered_callback triggered')
     udp_send_sock.sendto ('You are in front of the door', INSTAPUSH_NOTIF_ADDR)
-    log.print_low ('Starting camera')
+    log.print_high ('Starting camera')
     cam.start_camera ('320x240', '5', 'night')
     pitft.Backlight (True)
-    log.print_low ('Starting stream_video_to_display')
+    log.print_high ('Starting stream_video_to_display')
     pitft.stream_video_to_display ()
-    log.print_low ('Sleeping for 120 s')
+    log.print_high ('Sleeping for 120 s')
     
     # TODO: implement as a retriggered scheduler
     sleep (120)
-    log.print_low ('Done sleeping for 120 s. Stopping stream...')
+    log.print_high ('Done sleeping for 120 s. Stopping stream...')
     pitft.stop_stream_video_to_display ()
-    log.print_low ('Stream stoppped. Turning backlight off...')
+    log.print_high ('Stream stoppped. Turning backlight off...')
     pitft.Backlight (False)
-    log.print_low ('Backlight off. Stopping camera...')
+    log.print_high ('Backlight off. Stopping camera...')
     cam.stop_camera ()
-    log.print_low ('Camera off')
+    log.print_high ('Camera off')
     log.print_high ('exiting inside_pir_triggered_callback')
 
 def outside_pir_triggered_callback_func(channel):
@@ -81,12 +81,12 @@ def main ():
     # Create sensors object
     sensors_obj = Sensors (inside_pir_triggered_callback_func, outside_pir_triggered_callback_func,
                       door_switch_triggered_callback_func)
-    log.print_low ('Created sensors object')
+    log.print_high ('Created sensors object')
     i = 0
     while (True):
         if (i == 100):
             i = 0
-            log.print_low ('Waiting...')
+            log.print_high ('Waiting...')
         else:
             i = i + 1
         sleep (0.1)
@@ -96,6 +96,6 @@ if __name__ == "__main__":
 
 # Create motion service handler (stopped by default)
 #motion_service = motion ()
-#log.print_low ('Created motion service handler')
+#log.print_high ('Created motion service handler')
 
 
