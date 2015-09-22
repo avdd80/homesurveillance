@@ -8,12 +8,16 @@ from   xml_handler import XML_Object
 from   logger      import log_handler
 from   pitftscreen import PiTFT_Screen
 from   cam_server  import Cam_Object
-from   apscheduler.schedulers.blocking import BlockingScheduler
+# APScheduler > 3.0.0
+#from   apscheduler.schedulers.blocking import BlockingScheduler
+# APScheduler == 2.1.2
+from apscheduler.scheduler import Scheduler
 
 log = log_handler (True)
 log.set_log_level (log.LOG_LEVEL_LOW)
 
-logging.basicConfig()
+# For APScheduler > 3.0.0
+#logging.basicConfig()
 
 class Sched_Obj:
 
@@ -38,13 +42,13 @@ class Sched_Obj:
         log.print_high ('Created camera object')
 
         log.print_high ('Before Blocking scheduler obj')
-        self.__sched = BlockingScheduler()
+        self.__sched = Scheduler()
         log.print_high ('Blocking scheduler obj created')
         self.__sched.start()        # start the scheduler
         log.print_high ('Scheduler started')
 
         # Create a dummy job and cancel it
-        self.__stream_job = self.__sched.add_job(stop_streaming_cb, datetime.datetime.today () + datetime.timedelta (seconds = 5))
+        self.__stream_job = self.__sched.add_date_job(stop_streaming_cb, datetime.datetime.today () + datetime.timedelta (seconds = 5))
         self.__stream_job.cancel_job ()
 
         log.print_high ('Scheduler init done')
@@ -85,6 +89,6 @@ class Sched_Obj:
         
         # Blindly cancel the job before scheduling it
         self.__stream_job.cancel_job ()
-        self.__stream_job = self.__sched.add_job(stop_streaming_cb, datetime.datetime.today () + datetime.timedelta (seconds = seconds_delay))
+        self.__stream_job = self.__sched.add_date_job(stop_streaming_cb, datetime.datetime.today () + datetime.timedelta (seconds = seconds_delay))
         log.print_high ('Will turn off stream after ' + str (seconds_delay) + ' from now')
         return
