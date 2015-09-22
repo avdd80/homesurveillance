@@ -6,6 +6,8 @@ import time, datetime
 from   socket      import *
 from   xml_handler import XML_Object
 from   logger      import log_handler
+from   pitftscreen import PiTFT_Screen
+from   cam_server  import Cam_Object
 from   apscheduler.schedulers.blocking import BlockingScheduler
 
 log = log_handler (True)
