@@ -9,7 +9,7 @@ from   logger      import log_handler
 from   pitftscreen import PiTFT_Screen
 from   cam_server  import Cam_Object
 # APScheduler > 3.0.0
-from   apscheduler.schedulers.blocking import BlockingScheduler
+from   apscheduler.schedulers.background import BackgroundScheduler
 # APScheduler == 2.1.2
 #from apscheduler.scheduler import Scheduler
 
@@ -42,14 +42,15 @@ class Sched_Obj:
         log.print_high ('Created camera object')
 
         log.print_high ('Before Blocking scheduler obj')
-        self.__sched = Scheduler()
+        self.__sched = BlockingScheduler()
         log.print_high ('Blocking scheduler obj created')
         self.__sched.start()        # start the scheduler
         log.print_high ('Scheduler started')
 
         # Create a dummy job and cancel it
-        self.__stream_job.cancel_job ()
-        self.__stream_job = self.__sched.add_date_job(self.stop_streaming_cb, datetime.datetime.today () + datetime.timedelta (seconds = 5))
+        
+        self.__stream_job = self.__sched.add_job(self.stop_streaming_cb, 'interval', seconds = 5)
+        self.__stream_job.remove_job ()
 
         log.print_high ('Scheduler init done')
 
@@ -66,6 +67,8 @@ class Sched_Obj:
 
     def stop_streaming_cb (self):
 
+        # First cancel the interval job
+        self.__stream_job.remove_job ()
         log.print_high ('Stopping stream...')
         self.__pitft.stop_stream_video_to_display ()
         log.print_high ('Stream stoppped. Turning backlight off...')
@@ -88,7 +91,8 @@ class Sched_Obj:
     def schedule_stop_streaming (self, seconds_delay = 240):
         
         # Blindly cancel the job before scheduling it
-        self.__stream_job.cancel_job ()
-        self.__stream_job = self.__sched.add_date_job(self.stop_streaming_cb, datetime.datetime.today () + datetime.timedelta (seconds = seconds_delay))
+        self.__stream_job.remove_job ()
+        self.__stream_job = self.__sched.add_job(self.stop_streaming_cb, 'interval', seconds_delay)
+        #self.__stream_job = self.__sched.add_date_job(self.stop_streaming_cb, datetime.datetime.today () + datetime.timedelta (seconds = seconds_delay))
         log.print_high ('Will turn off stream after ' + str (seconds_delay) + ' from now')
         return
