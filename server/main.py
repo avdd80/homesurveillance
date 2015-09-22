@@ -31,11 +31,6 @@ log.print_high ('Created TFT display object')
 cam   = Cam_Object ()
 log.print_high ('Created camera object')
 
-# Create sensors object
-sensors_obj = Sensors (inside_pir_triggered_callback_func, outside_pir_triggered_callback_func,
-                       door_switch_triggered_callback_func)
-log.print_high ('Created sensors object')
-
 def inside_pir_triggered_callback_func (channel):
     log.print_high ('inside_pir_triggered_callback triggered')
     udp_send_sock.sendto ('You are in front of the door', INSTAPUSH_NOTIF_ADDR)
@@ -86,6 +81,12 @@ def main ():
 
     # Start Framebuffer copy daemon
     pitft.start_fbcp_process()
+    
+    # Create sensors object
+    sensors_obj = Sensors (inside_pir_triggered_callback_func, outside_pir_triggered_callback_func,
+                      door_switch_triggered_callback_func)
+
+    log.print_high ('Created sensors object')
 
     i = 0
     while (True):
