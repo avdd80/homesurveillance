@@ -42,7 +42,7 @@ class Sched_Obj:
         log.print_high ('Created camera object')
 
         log.print_high ('Before Blocking scheduler obj')
-        self.__sched = BlockingScheduler()
+        self.__sched = BackgroundScheduler()
         log.print_high ('Blocking scheduler obj created')
         self.__sched.start()        # start the scheduler
         log.print_high ('Scheduler started')
