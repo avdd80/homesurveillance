@@ -49,7 +49,7 @@ class Sched_Obj:
 
         # Create a dummy job and cancel it
         self.__stream_job = self.__sched.add_date_job(self.stop_streaming_cb, datetime.datetime.today () + datetime.timedelta (seconds = 5))
-        self.__stream_job.unschedule_job ()
+        Scheduler.unschedule_job (self.stop_streaming_cb.job)
 
         log.print_high ('Scheduler init done')
 
