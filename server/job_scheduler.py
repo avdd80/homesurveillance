@@ -49,7 +49,7 @@ class Sched_Obj:
 
         # Create a dummy job and cancel it
         self.__stream_job = self.__sched.add_date_job(self.stop_streaming_cb, datetime.datetime.today () + datetime.timedelta (seconds = 5))
-        self.__stream_job.cancel_job ()
+        self.__stream_job.unschedule_job ()
 
         log.print_high ('Scheduler init done')
 
@@ -88,7 +88,7 @@ class Sched_Obj:
     def schedule_stop_streaming (self, seconds_delay = 240):
         
         # Blindly cancel the job before scheduling it
-        self.__stream_job.cancel_job ()
+        self.__stream_job.unschedule_job ()
         self.__stream_job = self.__sched.add_date_job(self.stop_streaming_cb, datetime.datetime.today () + datetime.timedelta (seconds = seconds_delay))
         log.print_high ('Will turn off stream after ' + str (seconds_delay) + ' from now')
         return
