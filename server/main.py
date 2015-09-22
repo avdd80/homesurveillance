@@ -29,12 +29,22 @@ log.set_log_level (log.LOG_LEVEL_LOW)
 scheduler_obj = Sched_Obj ()
 
 
+is_interrupt_already_processing = False
 def inside_pir_triggered_callback_func (channel):
-    log.print_high ('inside_pir_triggered_callback triggered')
-    udp_send_sock.sendto ('You are in front of the door', INSTAPUSH_NOTIF_ADDR)
-    scheduler_obj.schedule_start_streaming ()
-    scheduler_obj.schedule_stop_streaming (10)
-    log.print_high ('exiting inside_pir_triggered_callback')
+
+    # Make the ISR (kind of) atomic by disallowing nested interrupts to process
+    if (is_interrupt_already_processing):
+        log.print_high ('Nested inside_pir_triggered_callback triggered. Returning')
+        return
+    else:
+        # CRITICAL SECTION
+        is_interrupt_already_processing = True
+        log.print_high ('inside_pir_triggered_callback triggered')
+        udp_send_sock.sendto ('You are in front of the door', INSTAPUSH_NOTIF_ADDR)
+        scheduler_obj.schedule_start_streaming ()
+        scheduler_obj.schedule_stop_streaming (10)
+        log.print_high ('exiting inside_pir_triggered_callback')
+        is_interrupt_already_processing = False
 
 def outside_pir_triggered_callback_func(channel):
     log.print_high ('outside_pir_triggered_callback triggered')

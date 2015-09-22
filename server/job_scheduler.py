@@ -68,7 +68,7 @@ class Sched_Obj:
     def stop_streaming_cb (self):
 
         # First cancel the interval job
-        self.__stream_job.remove_job ()
+        self.__stream_job.remove ()
         log.print_high ('Stopping stream...')
         self.__pitft.stop_stream_video_to_display ()
         log.print_high ('Stream stoppped. Turning backlight off...')
@@ -92,7 +92,7 @@ class Sched_Obj:
         
         # Blindly cancel the job before scheduling it
         self.__stream_job.remove ()
-        self.__stream_job = self.__sched.add_job(self.stop_streaming_cb, 'interval', seconds_delay)
+        self.__stream_job = self.__sched.add_job(self.stop_streaming_cb, 'interval', seconds = seconds_delay)
         #self.__stream_job = self.__sched.add_date_job(self.stop_streaming_cb, datetime.datetime.today () + datetime.timedelta (seconds = seconds_delay))
         log.print_high ('Will turn off stream after ' + str (seconds_delay) + ' from now')
         return
