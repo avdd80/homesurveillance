@@ -13,6 +13,8 @@ log.set_log_level (log.LOG_LEVEL_LOW)
 
 xml = XML_Object ()
 
+class Sensors(object):
+
     def __init__(self, inside_pir_triggered_callback, outside_pir_triggered_callback,
                        door_switch_triggered_callback):
         '''
