@@ -31,14 +31,14 @@ class Sched_Obj:
         
         del xml
 
-	# Create TFT display object
-	self.__pitft = PiTFT_Screen ()
-	log.print_high ('Created TFT display object')
-	
-	# Start Framebuffer copy daemon
+        # Create TFT display object
+        self.__pitft = PiTFT_Screen ()
+        log.print_high ('Created TFT display object')
+
+        # Start Framebuffer copy daemon
         self.__pitft.start_fbcp_process()
-	
-	self.__cam   = Cam_Object ()
+
+        self.__cam   = Cam_Object ()
         log.print_high ('Created camera object')
 
         log.print_high ('Before Blocking scheduler obj')
