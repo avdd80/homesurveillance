@@ -42,7 +42,7 @@ def inside_pir_triggered_callback_func (channel):
         log.print_high ('inside_pir_triggered_callback triggered')
         udp_send_sock.sendto ('You are in front of the door', INSTAPUSH_NOTIF_ADDR)
         scheduler_obj.schedule_start_streaming ()
-        scheduler_obj.schedule_stop_streaming (10)
+        scheduler_obj.schedule_stop_streaming (40)
         log.print_high ('exiting inside_pir_triggered_callback')
 
 def outside_pir_triggered_callback_func(channel):

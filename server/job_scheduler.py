@@ -114,10 +114,12 @@ class Sched_Obj:
         instapush_notif_timeout = xml.get_instapush_notif_timeout ()
         return
 #-------------------------------------------------------------------------#
+    # Increment interrupt count and start a timer
     def increment_outside_PIR_interrupt_count (self):
+        self.__outside_PIR_interrupt_count = self.__outside_PIR_interrupt_count + 1
+        log.print_high ('# of interrupts = ' + str (self.__outside_PIR_interrupt_count))
         if (self.__outside_PIR_interrupt_count == 0):
-            self.__outside_PIR_interrupt_count = self.__outside_PIR_interrupt_count + 1
-            log.print_high ('# of interrupts = ' + str (self.__outside_PIR_interrupt_count))
+            schedule_instapush_notif_timeout ()
         return
 
 #-------------------------------------------------------------------------#
