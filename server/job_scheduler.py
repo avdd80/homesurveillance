@@ -34,6 +34,13 @@ class Sched_Obj:
 #        self.__JOB_SCHED_RECV_ADDR  = (self.__JOB_SCHED_IP, self.__JOB_SCHED_PORT)
 
 #---------------------------------------------------------------#
+#------------------------ SCHEDULER INIT -----------------------#
+#---------------------------------------------------------------#
+
+        self.__sched = BackgroundScheduler()
+        self.__sched.start()        # start the scheduler
+        log.print_high ('Scheduler started')
+#---------------------------------------------------------------#
 #------------------------ INSTAPUSH INIT -----------------------#
 #---------------------------------------------------------------#
 
@@ -66,12 +73,6 @@ class Sched_Obj:
 
         self.__cam   = Cam_Object ()
         log.print_high ('Created camera object')
-
-        log.print_high ('Before Blocking scheduler obj')
-        self.__sched = BackgroundScheduler()
-        log.print_high ('Blocking scheduler obj created')
-        self.__sched.start()        # start the scheduler
-        log.print_high ('Scheduler started')
 
         # Create a dummy job and cancel it
         
