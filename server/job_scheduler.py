@@ -102,7 +102,6 @@ class Sched_Obj:
             udp_send_sock.sendto ('Someone outside your door', self.__INSTAPUSH_NOTIF_ADDR)
             self.__last_instapush_notif_sent_at = datetime.datetime.now ()
         else:
-            if (
             log.print_high ('No notif. Last notif sent ' + self.how_long_ago_was_last_instapush_notif_sent () 
                              + 's ago. Interrupt count = ' + self.__outside_PIR_interrupt_count)
             
