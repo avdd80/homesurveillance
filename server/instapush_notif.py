@@ -75,7 +75,6 @@ while True:
         # make sure to send the JSON with post
         c.setopt(c.POSTFIELDS, postfields)
 
-
         # in the door is opened, send the push request
         c.perform()
 

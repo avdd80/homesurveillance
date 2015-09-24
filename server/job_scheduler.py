@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # job_scheduler.py
+# Responsible for scheduling all the importants jobs
 import sys
 import logging
 import time, datetime
@@ -21,15 +22,37 @@ logging.basicConfig()
 
 class Sched_Obj:
 
+#=========================================================================#
+#-------------------------------- INIT -----------------------------------#
+#=========================================================================#
+
     def __init__(self):
         
         xml = XML_Object ()
-        self.__BUFSIZE             = 128
-        self.__JOB_SCHED_IP        = xml.get_job_scheduler_ip ()
-        self.__JOB_SCHED_PORT      = xml.get_job_scheduler_port ()
-        self.__JOB_SCHED_RECV_ADDR = (self.__JOB_SCHED_IP, self.__JOB_SCHED_PORT)
+#        self.__JOB_SCHED_IP         = xml.get_job_scheduler_ip ()
+#        self.__JOB_SCHED_PORT       = xml.get_job_scheduler_port ()
+#        self.__JOB_SCHED_RECV_ADDR  = (self.__JOB_SCHED_IP, self.__JOB_SCHED_PORT)
+
+#---------------------------------------------------------------#
+#------------------------ INSTAPUSH INIT -----------------------#
+#---------------------------------------------------------------#
+
+        self.__INSTAPUSH_NOTIF_IP   = xml.get_instapush_notif_ip ()
+        self.__INSTAPUSH_NOTIF_PORT = xml.get_instapush_notif_port ()
+        self.__INSTAPUSH_NOTIF_ADDR = (self.__INSTAPUSH_NOTIF_IP, self.__INSTAPUSH_NOTIF_PORT)
+
+        self.__min_gap_between_two_instapush_notif = xml.min_gap_between_two_instapush_notif ()
+        # Record the timestamp when the last instapush notification was sent
+        self.__last_instapush_notif_sent_at = datetime.datetime.now ()
+        
+        self.__is_stream_job_running        = False
+        self.__outside_PIR_interrupt_count  = 0
         
         del xml
+
+#---------------------------------------------------------------#
+#---------------------- PITFT SCREEN INIT ----------------------#
+#---------------------------------------------------------------#
 
         # Create TFT display object
         self.__pitft = PiTFT_Screen ()
@@ -53,8 +76,51 @@ class Sched_Obj:
         self.__stream_job.remove ()
 
         log.print_high ('Scheduler init done')
+        
+#=========================================================================#
+#------------------------------ INIT END ---------------------------------#
+#=========================================================================#
 
+#=========================================================================#
+#---------------------- INSTAPUSH NOTIFICATION HANDLER -------------------#
+#=========================================================================#
 
+    def how_long_ago_was_last_instapush_notif_sent (self):
+        current_time = datetime.datetime.now ()
+        diff = self.__last_instapush_notif_sent_at - current_time
+        return int (diff.total_seconds())
+#-------------------------------------------------------------------------#
+    # Send an instapush notification if we get more than 
+    # 2 interrupts (reconfigurable) during the timout (also reconfigurable)
+    # To avoid flooding notifications, allow a minimum gap between two 
+    # notifications. Currently set to 5 minutes (reconfigurable)
+    
+    def instapush_notif_timeout_cb (self):
+        if ( (self.__outside_PIR_interrupt_count > xml.get_instapush_notif_interrupt_count()) and 
+              (self.how_long_ago_was_last_instapush_notif_sent () > self.__min_gap_between_two_instapush_notif ()) ):
+            udp_send_sock.sendto ('Someone outside your door', self.__INSTAPUSH_NOTIF_ADDR)
+            self.__last_instapush_notif_sent_at = datetime.datetime.now ()
+            
+        # Reset the counter for the current cycle
+        self.__outside_PIR_interrupt_count = 0
+        return
+#-------------------------------------------------------------------------#
+    # Count the number of interrupts in 20 seconds (reconfigurable)
+    def schedule_instapush_notif_timeout (self, delay = 20):
+        instapush_notif_timeout = xml.get_instapush_notif_timeout ()
+        return
+#-------------------------------------------------------------------------#
+    def increment_outside_PIR_interrupt_count (self):
+        if (self.__outside_PIR_interrupt_count == 0):
+        self.__outside_PIR_interrupt_count = self.__outside_PIR_interrupt_count + 1
+
+#-------------------------------------------------------------------------#
+#------------------------------ STREAM HANDLER ---------------------------#
+#-------------------------------------------------------------------------#
+
+    def is_stream_running (self):
+        return (self.__is_stream_job_running)
+#-------------------------------------------------------------------------#
     # Implemented as a callback function
     def start_streaming_cb (self):
         log.print_high ('Starting camera...')
@@ -64,7 +130,10 @@ class Sched_Obj:
             self.__pitft.stream_video_to_display ()
         else:
             log.print_high ('scheduler: Camera already on')
-
+        self.__is_stream_job_running = True
+#-------------------------------------------------------------------------#
+    # Turns off camera streaming. 
+    # Turns off local display
     def stop_streaming_cb (self):
 
         # First cancel the interval job
@@ -77,16 +146,17 @@ class Sched_Obj:
         
         if (self.__cam.stop_camera ()):
             log.print_high ('scheduler: Camera off')
+            self.__is_stream_job_running = False
         else:
             log.print_high ('scheduler: Could not turn off camera')
         log.print_high ('exiting inside_pir_triggered_callback')
-
+#-------------------------------------------------------------------------#
     # Default schedule delay is 0 minutes
     def schedule_start_streaming (self, delay = 0):
         if (delay == 0):
             self.start_streaming_cb ()
         return
-
+#-------------------------------------------------------------------------#
     # Default schedule delay is 4 minutes
     def schedule_stop_streaming (self, seconds_delay = 240):
         
@@ -94,5 +164,8 @@ class Sched_Obj:
         self.__stream_job.remove ()
         self.__stream_job = self.__sched.add_job(self.stop_streaming_cb, 'interval', seconds = seconds_delay)
         #self.__stream_job = self.__sched.add_date_job(self.stop_streaming_cb, datetime.datetime.today () + datetime.timedelta (seconds = seconds_delay))
-        log.print_high ('Will turn off stream after ' + str (seconds_delay) + ' from now')
+        log.print_high ('Will turn off stream after ' + str (seconds_delay) + 's from now')
         return
+#=========================================================================#
+#-------------------------------- END ------------------------------------#
+#=========================================================================#

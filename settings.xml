@@ -58,11 +58,14 @@
         <outside_pir>5</outside_pir>
         <door_switch>6</door_switch>
     </gpio_assignments>
-    <root_placeholder2>
-    </root_placeholder2>
+    <timings>
+        <instapush_notif_timeout>20</instapush_notif_timeout>
+        <min_gap_between_two_instapush_notif>300</min_gap_between_two_instapush_notif>
+    </timings>
     <root_placeholder3>
     </root_placeholder3>
     <misc>
         <client_count>1</client_count>
+        <instapush_notif_interrupt_count>1</instapush_notif_interrupt_count>
     </misc>
 </data>

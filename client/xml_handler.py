@@ -15,6 +15,7 @@ class XML_Object(object):
         self.__address_node = self.__root[0]
         self.__path_node    = self.__root[1]
         self.__gpio_node    = self.__root[2]
+        self.__timings_node = self.__root[3]
         self.__clients_node = self.__address_node
         self.__misc_node    = self.__root[5]
 
@@ -91,6 +92,20 @@ class XML_Object(object):
 #------------------------------------------------------#
     def get_door_switch_gpio_pin (self):
         return int (self.__gpio_node[2].text)
+#------------------------------------------------------#
+#--------------------- Timings ------------------------#
+#------------------------------------------------------#
+    def get_instapush_notif_timeout (self):
+        return int (self.__timings_node[0].text)
+#------------------------------------------------------#
+    def min_gap_between_two_instapush_notif (self):
+        return int (self.__timings_node[1].text)
+#------------------------------------------------------#
+#----------------------- Misc -------------------------#
+#------------------------------------------------------#
+    def get_instapush_notif_interrupt_count (self):
+        return int (self.__misc_node[1].text)
+#------------------------------------------------------#
 #------------------------------------------------------#
 #------------------------------------------------------#
 #----------------------- PATHS ------------------------
