@@ -43,7 +43,7 @@ while True:
     # video streaming starts
     if (data == 'LISTEN_TO_STREAM'):
         udp_send_sock.sendto ('LISTEN_TO_STREAM', DISPLAY_STREAM_LAUNCHER_ADDR)
-        Popen ('sudo fbi -T 2 -d /dev/fb0 -noverbose -a ../rpi_cam_splash_800x480.png', shell=True, stdout=PIPE)
+        Popen ('sudo fbi -T 2 -d /dev/fb0 -noverbose -a ../images/rpi_cam_splash_800x480.png', shell=True, stdout=PIPE)
         log.print_high ('early_server_monitor: Sent LISTEN_TO_STREAM')
 
     # Sleep for 5 seconds to avoid receiving multiple UDP messages

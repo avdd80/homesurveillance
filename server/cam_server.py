@@ -66,7 +66,7 @@ class Cam_Object:
         # Start camera only if it is not already started
         if (not self.get_cam_status ()):
 
-            Popen ('sudo fbi -T 2 -d /dev/fb0 -noverbose -a ../rpi_cam_splash_320x240.png', shell=True, stdout=PIPE)
+            Popen ('sudo fbi -T 2 -d /dev/fb0 -noverbose -a ../images/rpi_cam_splash_320x240.png', shell=True, stdout=PIPE)
             log.print_high ('cam_server: Starting camera...')
 
             # Available scripts
