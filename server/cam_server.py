@@ -104,12 +104,16 @@ class Cam_Object:
     def stop_camera(self):
         timeout = 10
         log.print_high ('Killing camera...')
-        Popen ('sudo pkill mjpg_streamer. status = ' + str(self.get_cam_status ()), shell=True, stdout=PIPE)
+        Popen ('sudo pkill mjpg_streamer', shell=True, stdout=PIPE)
         sleep (2)
-        log.print_high ('Could not kill cam. Will try again. Status = ' + str(self.get_cam_status ()))
         while ((self.get_cam_status () == True) and timeout > 0):
             Popen ('sudo pkill mjpg_streamer', shell=True, stdout=PIPE)
             timeout = timeout - 1
             log.print_high ('Killing mjpg_streamer. Number retries left: ' + str(timeout))
             sleep (2)
-        return self.get_cam_status ()
+        
+        # get_cam_status returns the status of the camera. If True,
+        # camera is ON. If False, camera is OFF. The flag must be inverted
+        # for the calling function to interpret the return value
+        # correctly: True == SUCCESS (cam off), False == FAILURE (Cam on)
+        return (not self.get_cam_status ())

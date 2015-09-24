@@ -163,12 +163,11 @@ class Sched_Obj:
         self.__pitft.Backlight (False)
         log.print_high ('Backlight off. Stopping camera...')
         
-        ret_val = self.__cam.stop_camera ()
-        if (ret_val):
+        if (self.__cam.stop_camera ()):
             log.print_high ('scheduler: Camera off')
             self.__is_stream_job_running = False
         else:
-            log.print_high ('scheduler: Could not turn off camera returned value = ' + str (ret_val))
+            log.print_high ('scheduler: Could not turn off camera')
         log.print_high ('exiting inside_pir_triggered_callback')
         return
 #-------------------------------------------------------------------------#
