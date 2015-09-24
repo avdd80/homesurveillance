@@ -102,8 +102,8 @@ class Sched_Obj:
             udp_send_sock.sendto ('Someone outside your door', self.__INSTAPUSH_NOTIF_ADDR)
             self.__last_instapush_notif_sent_at = datetime.datetime.now ()
         else:
-            log.print_high ('No notif. Last notif sent ' + self.how_long_ago_was_last_instapush_notif_sent () 
-                             + 's ago. Interrupt count = ' + self.__outside_PIR_interrupt_count)
+            log.print_high ('No notif. Last notif sent ' + str (self.how_long_ago_was_last_instapush_notif_sent ()) 
+                             + 's ago. Interrupt count = ' + str (self.__outside_PIR_interrupt_count))
             
         # Reset the counter for the current cycle
         self.__outside_PIR_interrupt_count = 0
@@ -117,7 +117,7 @@ class Sched_Obj:
     def increment_outside_PIR_interrupt_count (self):
         if (self.__outside_PIR_interrupt_count == 0):
             self.__outside_PIR_interrupt_count = self.__outside_PIR_interrupt_count + 1
-            log.print_high ('# of interrupts = ' + self.__outside_PIR_interrupt_count)
+            log.print_high ('# of interrupts = ' + str (self.__outside_PIR_interrupt_count))
         return
 
 #-------------------------------------------------------------------------#
