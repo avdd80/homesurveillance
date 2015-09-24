@@ -48,6 +48,9 @@ class Sched_Obj:
         self.__is_stream_job_running        = False
         self.__outside_PIR_interrupt_count  = 0
         
+        self.__instapush_notif_timeout_job= self.__sched.add_job(self.instapush_notif_timeout_cb, 'interval', seconds = 5)
+        self.__instapush_notif_timeout_job.remove ()
+        
         del xml
 
 #---------------------------------------------------------------#
@@ -96,6 +99,12 @@ class Sched_Obj:
     # notifications. Currently set to 5 minutes (reconfigurable)
     
     def instapush_notif_timeout_cb (self):
+        # Remove the interval job
+        self.__instapush_notif_timeout_job.remove ()
+        
+        # Check the interrupt count during the timeout. If greater than the
+        # threshold, send a notification.
+        # Also check when the last notification was sent. 
         if ( (self.__outside_PIR_interrupt_count > xml.get_instapush_notif_interrupt_count()) and 
               (self.how_long_ago_was_last_instapush_notif_sent () > self.__min_gap_between_two_instapush_notif ()) ):
             log.print_high ('Will send a notif now')
@@ -110,8 +119,9 @@ class Sched_Obj:
         return
 #-------------------------------------------------------------------------#
     # Count the number of interrupts in 20 seconds (reconfigurable)
-    def schedule_instapush_notif_timeout (self, delay = 20):
+    def schedule_instapush_notif_timeout (self, instapush_notif_timeout = 20):
         instapush_notif_timeout = xml.get_instapush_notif_timeout ()
+        self.__instapush_notif_timeout_job = self.__sched.add_job(self.instapush_notif_timeout_cb, 'interval', seconds = instapush_notif_timeout)
         return
 #-------------------------------------------------------------------------#
     # Increment interrupt count and start a timer
