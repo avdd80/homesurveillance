@@ -98,8 +98,13 @@ class Sched_Obj:
     def instapush_notif_timeout_cb (self):
         if ( (self.__outside_PIR_interrupt_count > xml.get_instapush_notif_interrupt_count()) and 
               (self.how_long_ago_was_last_instapush_notif_sent () > self.__min_gap_between_two_instapush_notif ()) ):
+            log.print_high ('Will send a notif now')
             udp_send_sock.sendto ('Someone outside your door', self.__INSTAPUSH_NOTIF_ADDR)
             self.__last_instapush_notif_sent_at = datetime.datetime.now ()
+        else:
+            if (
+            log.print_high ('No notif. Last notif sent ' + self.how_long_ago_was_last_instapush_notif_sent () 
+                             + 's ago. Interrupt count = ' + self.__outside_PIR_interrupt_count)
             
         # Reset the counter for the current cycle
         self.__outside_PIR_interrupt_count = 0
@@ -112,7 +117,9 @@ class Sched_Obj:
 #-------------------------------------------------------------------------#
     def increment_outside_PIR_interrupt_count (self):
         if (self.__outside_PIR_interrupt_count == 0):
-        self.__outside_PIR_interrupt_count = self.__outside_PIR_interrupt_count + 1
+            self.__outside_PIR_interrupt_count = self.__outside_PIR_interrupt_count + 1
+            log.print_high ('# of interrupts = ' + self.__outside_PIR_interrupt_count)
+        return
 
 #-------------------------------------------------------------------------#
 #------------------------------ STREAM HANDLER ---------------------------#
@@ -150,6 +157,7 @@ class Sched_Obj:
         else:
             log.print_high ('scheduler: Could not turn off camera')
         log.print_high ('exiting inside_pir_triggered_callback')
+        return
 #-------------------------------------------------------------------------#
     # Default schedule delay is 0 minutes
     def schedule_start_streaming (self, delay = 0):
