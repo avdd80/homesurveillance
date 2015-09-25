@@ -28,9 +28,9 @@ class Sched_Obj:
 
     def __init__(self):
         
-        xml = XML_Object ()
-#        self.__JOB_SCHED_IP         = xml.get_job_scheduler_ip ()
-#        self.__JOB_SCHED_PORT       = xml.get_job_scheduler_port ()
+        self.__xml = XML_Object ()
+#        self.__JOB_SCHED_IP         = self.__xml.get_job_scheduler_ip ()
+#        self.__JOB_SCHED_PORT       = self.__xml.get_job_scheduler_port ()
 #        self.__JOB_SCHED_RECV_ADDR  = (self.__JOB_SCHED_IP, self.__JOB_SCHED_PORT)
 
 #-------------------------------------------------------------------------#
@@ -44,11 +44,11 @@ class Sched_Obj:
 #----------------------------- INSTAPUSH INIT ----------------------------#
 #-------------------------------------------------------------------------#
 
-        self.__INSTAPUSH_NOTIF_IP   = xml.get_instapush_notif_ip ()
-        self.__INSTAPUSH_NOTIF_PORT = xml.get_instapush_notif_port ()
+        self.__INSTAPUSH_NOTIF_IP   = self.__xml.get_instapush_notif_ip ()
+        self.__INSTAPUSH_NOTIF_PORT = self.__xml.get_instapush_notif_port ()
         self.__INSTAPUSH_NOTIF_ADDR = (self.__INSTAPUSH_NOTIF_IP, self.__INSTAPUSH_NOTIF_PORT)
 
-        self.__min_gap_between_two_instapush_notif = xml.min_gap_between_two_instapush_notif ()
+        self.__min_gap_between_two_instapush_notif = self.__xml.min_gap_between_two_instapush_notif ()
         # Record the timestamp when the last instapush notification was sent
         self.__last_instapush_notif_sent_at = datetime.datetime.now ()
         
@@ -57,8 +57,6 @@ class Sched_Obj:
         
         self.__instapush_notif_timeout_job= self.__sched.add_job(self.instapush_notif_timeout_cb, 'interval', seconds = 5)
         self.__instapush_notif_timeout_job.remove ()
-        
-        del xml
 
 #-------------------------------------------------------------------------#
 #--------------------------- PITFT SCREEN INIT ---------------------------#
@@ -108,7 +106,7 @@ class Sched_Obj:
         # Check the interrupt count during the timeout. If greater than the
         # threshold, send a notification.
         # Also check when the last notification was sent. 
-        if ( (self.__outside_PIR_interrupt_count > xml.get_instapush_notif_interrupt_count()) and 
+        if ( (self.__outside_PIR_interrupt_count > self.__xml.get_instapush_notif_interrupt_count()) and 
               (self.how_long_ago_was_last_instapush_notif_sent () > self.__min_gap_between_two_instapush_notif ()) ):
             log.print_high ('Will send a notif now')
             udp_send_sock.sendto ('Someone outside your door', self.__INSTAPUSH_NOTIF_ADDR)
@@ -123,7 +121,7 @@ class Sched_Obj:
 #-------------------------------------------------------------------------#
     # Count the number of interrupts in 20 seconds (reconfigurable)
     def schedule_instapush_notif_timeout (self, instapush_notif_timeout = 20):
-        instapush_notif_timeout = xml.get_instapush_notif_timeout ()
+        instapush_notif_timeout = self.__xml.get_instapush_notif_timeout ()
         self.__instapush_notif_timeout_job = self.__sched.add_job(self.instapush_notif_timeout_cb, 'interval', seconds = instapush_notif_timeout)
         log.print_high ('Scheduled instapush_notif_timeout for ' + str (instapush_notif_timeout) + 's')
         return
