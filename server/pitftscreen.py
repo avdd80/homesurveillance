@@ -41,7 +41,9 @@ def is_process_running (process_name):
         return False
 
 class PiTFT_Screen(object):
-
+#=========================================================================#
+#-------------------------------- INIT -----------------------------------#
+#=========================================================================#
     def __init__(self, v2 = True, buttons = [True, True, True, True]):
         '''Initialise class.
 
@@ -107,6 +109,13 @@ class PiTFT_Screen(object):
             log.print_error ('Could not setup backlight')
             
         log.print_high ('PiTFT setup done')
+#=========================================================================#
+#------------------------------ INIT END ---------------------------------#
+#=========================================================================#
+
+#=========================================================================#
+#----------------------- SCREEN AND BACKLIGHT HANDLER --------------------#
+#=========================================================================#
 
     def __setupBacklight(self):
 
@@ -120,7 +129,7 @@ class PiTFT_Screen(object):
         # If we had no errors up to here then we should be able to control
         # backlight
         return True
-
+#-------------------------------------------------------------------------#
     def Backlight(self, light):
         '''Turns the PiTFT backlight on or off.
 
@@ -140,7 +149,7 @@ class PiTFT_Screen(object):
             log.print_low ('pitft: Backlight: Turning off display')
             #system ('sudo sh -c ''echo 0 > /sys/class/gpio/gpio508/value''')
             system ('sudo sh -c ''../scripts/display_off.sh''')
-
+#-------------------------------------------------------------------------#
 
     # Add interrupt handling...
     def Button1Interrupt(self,callback=None,bouncetime=200):
@@ -170,7 +179,7 @@ class PiTFT_Screen(object):
                                   GPIO.FALLING,
                                   callback=callback,
                                   bouncetime=bouncetime)
-
+#-------------------------------------------------------------------------#
     def stream_video_to_display (self, fps = 5):
         if (self.__omxplayer_running):
             log.print_high ('pitft: stream_video_to_display: Omxplayer already running')
@@ -194,7 +203,7 @@ class PiTFT_Screen(object):
         if ( is_process_running ('omxplayer.bin') or is_process_running ('omxplayer') ):
             self.__omxplayer_running = True
         log.print_high ('pitft: stream_video_to_display: Exit')
-            
+#-------------------------------------------------------------------------#
     def stop_stream_video_to_display (self):
         log.print_high ('pitft: stop_stream_video_to_display: Entered')
         timeout = 10
@@ -213,17 +222,17 @@ class PiTFT_Screen(object):
             self.__omxplayer_running = False
         log.print_high ('pitft: stop_stream_video_to_display: Exit')
         
-        
+#-------------------------------------------------------------------------#
     def start_fbcp_process (self):
         if (is_process_running('fbcp') == False):
             Popen ('sudo fbcp', shell=True, stdout=PIPE)
 
-
+#-------------------------------------------------------------------------#
     # Include the GPIO cleanup method
     def Cleanup(self):
         GPIO.cleanup()
 
-
+#-------------------------------------------------------------------------#
     # Some properties to retrieve value state of pin and return more logical
     # True when pressed.
     @property
@@ -250,4 +259,6 @@ class PiTFT_Screen(object):
         if self.__b4:
             return not GPIO.input(self.__pin4)
 
-
+#=========================================================================#
+#--------------------------------- END -----------------------------------#
+#=========================================================================#

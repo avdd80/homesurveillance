@@ -21,6 +21,10 @@ def is_process_running (process_name):
 
 class Cam_Object:
 
+#=========================================================================#
+#-------------------------------- INIT -----------------------------------#
+#=========================================================================#
+
     def __init__(self):
     
         xml = XML_Object ()
@@ -32,11 +36,22 @@ class Cam_Object:
         
         Popen ('export LD_LIBRARY_PATH=' + self.__mjpeg_streamer_root_path, shell=True, stdout=PIPE)
         del xml
+        
+#=========================================================================#
+#------------------------------ INIT END ---------------------------------#
+#=========================================================================#
+
+#=========================================================================#
+#-------------------------------- START ----------------------------------#
+#=========================================================================#
+
     
     # This function sets the current cam status 
     def set_cam_status (self, new_cam_status):
         self.__is_cam_started = new_cam_status
         
+#-------------------------------------------------------------------------#
+
     def get_cam_status (self):
         if (is_process_running ('mjpg_streamer')):
             log.print_high ('mjpg_streamer running')
@@ -45,6 +60,8 @@ class Cam_Object:
             log.print_high ('mjpg_streamer not running')
             self.set_cam_status (False)
         return self.__is_cam_started
+
+#-------------------------------------------------------------------------#
 
     # This function sends 10 back to back messages to the client(s)
     # to allow them to start listening to the streams asap to reduce
@@ -60,6 +77,8 @@ class Cam_Object:
             CLIENT_ADDR = (CLIENT_LISTNER_UDP_IP, CLIENT_LISTNER_UDP_PORT)
             udp_send_sock.sendto ('LISTEN_TO_STREAM', CLIENT_ADDR)
         del xml
+
+#-------------------------------------------------------------------------#
 
     def start_camera(self, resolution='320x240', fps='5', exposure_mode=''):
 
@@ -100,8 +119,9 @@ class Cam_Object:
             log.print_high ('Multiple triggers received. Camera already running')
 
         return self.get_cam_status ()
-              
-            
+
+#-------------------------------------------------------------------------#
+
     def stop_camera(self):
         timeout = 10
         log.print_high ('Killing camera...')
@@ -118,3 +138,7 @@ class Cam_Object:
         # for the calling function to interpret the return value
         # correctly: True == SUCCESS (cam off), False == FAILURE (Cam on)
         return (not self.get_cam_status ())
+
+#=========================================================================#
+#--------------------------------- END -----------------------------------#
+#=========================================================================#

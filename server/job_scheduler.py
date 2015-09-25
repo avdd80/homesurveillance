@@ -33,16 +33,16 @@ class Sched_Obj:
 #        self.__JOB_SCHED_PORT       = xml.get_job_scheduler_port ()
 #        self.__JOB_SCHED_RECV_ADDR  = (self.__JOB_SCHED_IP, self.__JOB_SCHED_PORT)
 
-#---------------------------------------------------------------#
-#------------------------ SCHEDULER INIT -----------------------#
-#---------------------------------------------------------------#
+#-------------------------------------------------------------------------#
+#----------------------------- SCHEDULER INIT ----------------------------#
+#-------------------------------------------------------------------------#
 
         self.__sched = BackgroundScheduler()
         self.__sched.start()        # start the scheduler
         log.print_high ('Scheduler started')
-#---------------------------------------------------------------#
-#------------------------ INSTAPUSH INIT -----------------------#
-#---------------------------------------------------------------#
+#-------------------------------------------------------------------------#
+#----------------------------- INSTAPUSH INIT ----------------------------#
+#-------------------------------------------------------------------------#
 
         self.__INSTAPUSH_NOTIF_IP   = xml.get_instapush_notif_ip ()
         self.__INSTAPUSH_NOTIF_PORT = xml.get_instapush_notif_port ()
@@ -60,9 +60,9 @@ class Sched_Obj:
         
         del xml
 
-#---------------------------------------------------------------#
-#---------------------- PITFT SCREEN INIT ----------------------#
-#---------------------------------------------------------------#
+#-------------------------------------------------------------------------#
+#--------------------------- PITFT SCREEN INIT ---------------------------#
+#-------------------------------------------------------------------------#
 
         # Create TFT display object
         self.__pitft = PiTFT_Screen ()
@@ -103,6 +103,8 @@ class Sched_Obj:
         # Remove the interval job
         self.__instapush_notif_timeout_job.remove ()
         
+        log.print_high ('instapush_notif_timeout_fb triggered')
+        
         # Check the interrupt count during the timeout. If greater than the
         # threshold, send a notification.
         # Also check when the last notification was sent. 
@@ -123,14 +125,15 @@ class Sched_Obj:
     def schedule_instapush_notif_timeout (self, instapush_notif_timeout = 20):
         instapush_notif_timeout = xml.get_instapush_notif_timeout ()
         self.__instapush_notif_timeout_job = self.__sched.add_job(self.instapush_notif_timeout_cb, 'interval', seconds = instapush_notif_timeout)
+        log.print_high ('Scheduled instapush_notif_timeout for ' + str (instapush_notif_timeout) + 's')
         return
 #-------------------------------------------------------------------------#
     # Increment interrupt count and start a timer
     def increment_outside_PIR_interrupt_count (self):
-        self.__outside_PIR_interrupt_count = self.__outside_PIR_interrupt_count + 1
-        log.print_high ('# of interrupts = ' + str (self.__outside_PIR_interrupt_count))
         if (self.__outside_PIR_interrupt_count == 0):
             schedule_instapush_notif_timeout ()
+        self.__outside_PIR_interrupt_count = self.__outside_PIR_interrupt_count + 1
+        log.print_high ('# of interrupts = ' + str (self.__outside_PIR_interrupt_count))
         return
 
 #-------------------------------------------------------------------------#
@@ -187,5 +190,5 @@ class Sched_Obj:
         log.print_high ('Will turn off stream after ' + str (seconds_delay) + 's from now')
         return
 #=========================================================================#
-#-------------------------------- END ------------------------------------#
+#--------------------------------- END -----------------------------------#
 #=========================================================================#

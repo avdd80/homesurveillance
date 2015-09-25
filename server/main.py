@@ -9,9 +9,10 @@ from sensors       import Sensors
 from xml_handler   import XML_Object
 from logger        import log_handler
 from job_scheduler import Sched_Obj
-#from pitftscreen import PiTFT_Screen
-#from cam_server  import Cam_Object
 
+#=========================================================================#
+#-------------------------------- INIT -----------------------------------#
+#=========================================================================#
 
 xml = XML_Object ()
 
@@ -28,8 +29,15 @@ log.set_log_level (log.LOG_LEVEL_LOW)
 
 scheduler_obj = Sched_Obj ()
 
+#=========================================================================#
+#------------------------------ INIT END ---------------------------------#
+#=========================================================================#
 
-is_interrupt_already_processing = False
+#=========================================================================#
+#---------------------- INTERRUPT SERVICE ROUTINES -----------------------#
+#=========================================================================#
+
+
 def inside_pir_triggered_callback_func (channel):
 
     scheduler_obj.increment_outside_PIR_interrupt_count ()
@@ -44,11 +52,17 @@ def inside_pir_triggered_callback_func (channel):
         scheduler_obj.schedule_start_streaming ()
         scheduler_obj.schedule_stop_streaming (40)
         log.print_high ('exiting inside_pir_triggered_callback')
+    return
+
+#-------------------------------------------------------------------------#
+
 
 def outside_pir_triggered_callback_func(channel):
     log.print_high ('outside_pir_triggered_callback triggered')
+    return
 
-    
+#-------------------------------------------------------------------------#
+
 def door_switch_triggered_callback_func(channel):
     log.print_high ('door_switch_triggered_callback triggered')
     udp_send_sock.sendto ('Door opened', INSTAPUSH_NOTIF_ADDR)
@@ -62,7 +76,11 @@ def door_switch_triggered_callback_func(channel):
     #pitft.Backlight (False)
     #cam.stop_camera ()
     log.print_high ('exiting door_switch_triggered_callback triggered')
+    return
     
+#=========================================================================#
+#------------------------------ MAIN LOOP --------------------------------#
+#=========================================================================#
 
 def main ():
     log.print_high ('Starting...')
@@ -90,4 +108,6 @@ if __name__ == "__main__":
 #motion_service = motion ()
 #log.print_high ('Created motion service handler')
 
-
+#=========================================================================#
+#--------------------------------- END -----------------------------------#
+#=========================================================================#
