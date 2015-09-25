@@ -131,7 +131,7 @@ class Sched_Obj:
     # Increment interrupt count and start a timer
     def increment_outside_PIR_interrupt_count (self):
         if (self.__outside_PIR_interrupt_count == 0):
-            schedule_instapush_notif_timeout ()
+            self.schedule_instapush_notif_timeout ()
         self.__outside_PIR_interrupt_count = self.__outside_PIR_interrupt_count + 1
         log.print_high ('# of interrupts = ' + str (self.__outside_PIR_interrupt_count))
         return
