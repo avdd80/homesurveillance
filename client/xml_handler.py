@@ -35,26 +35,32 @@ class XML_Object(object):
     def get_remote_cam_server_port (self):
         return self.get_cam_server_port ()
 #------------------------------------------------------#
+#-- COMMAND SERVER ------------------------------------#
+    def get_remote_command_server_ip (self):
+        return self.get_cam_server_ip ()
+#------------------------------------------------------#
+    def get_remote_command_server_port (self):
+        return self.__address_node[1][1].text
 #-- INSTAPUSH -----------------------------------------#
     def get_instapush_notif_ip (self):
-        return self.__address_node[1][0].text
+        return self.__address_node[2][0].text
 #------------------------------------------------------#
     def get_instapush_notif_port (self):
-        return int (self.__address_node[1][1].text)
+        return int (self.__address_node[2][1].text)
 #------------------------------------------------------#
 #-- DISPLAY STREAM ------------------------------------#
     def get_display_stream_launcher_ip (self):
-        return self.__address_node[2][0].text
+        return self.__address_node[3][0].text
 #------------------------------------------------------#
     def get_display_stream_launcher_port (self):
-        return int (self.__address_node[2][1].text)
+        return int (self.__address_node[3][1].text)
 #------------------------------------------------------#
 #-- JOB SCHEDULER -------------------------------------#
     def get_job_scheduler_ip (self):
-        return self.__address_node[3][0].text
+        return self.__address_node[4][0].text
 #------------------------------------------------------#
     def get_job_scheduler_port (self):
-        return int (self.__address_node[3][1].text)
+        return int (self.__address_node[4][1].text)
 #------------------------------------------------------#
 #----------------- REMOTE CLIENTS ---------------------#
 #------------------------------------------------------#
@@ -100,6 +106,22 @@ class XML_Object(object):
 #------------------------------------------------------#
     def min_gap_between_two_instapush_notif (self):
         return int (self.__timings_node[1].text)
+#------------------------------------------------------#
+    def inside_pir_trigger_stream_duration (self):
+        return int (self.__timings_node[2].text)
+#------------------------------------------------------#
+    def outside_pir_trigger_stream_duration (self):
+        return int (self.__timings_node[3].text)
+#------------------------------------------------------#
+    def door_switch_trigger_stream_duration (self):
+        return int (self.__timings_node[4].text)
+#------------------------------------------------------#
+    # This is the minimum duration of time that has to 
+    # elapse after the inside PIR was last triggered to
+    # indicates no person is present
+    def inside_home_presence_timeout (self):
+        return int (self.__timings_node[4].text)
+
 #------------------------------------------------------#
 #----------------------- Misc -------------------------#
 #------------------------------------------------------#
