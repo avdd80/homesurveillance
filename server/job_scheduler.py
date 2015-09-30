@@ -23,7 +23,7 @@ logging.basicConfig()
 
 def get_elapsed_seconds_since (timestamp):
     current_time = datetime.datetime.now ()
-    return int ((timestamp - current_time).total_seconds())
+    return int ((current_time - timestamp).total_seconds())
     
 
 class Sched_Obj:
