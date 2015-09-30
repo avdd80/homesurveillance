@@ -21,6 +21,8 @@ log.set_log_level (log.LOG_LEVEL_LOW)
 logging.basicConfig()
 
 
+udp_send_sock.sendto ('Test message from start', (self.__xml.get_instapush_notif_ip (), self.__xml.get_instapush_notif_port ()))
+
 def get_elapsed_seconds_since (timestamp):
     current_time = datetime.datetime.now ()
     return int ((current_time - timestamp).total_seconds())
@@ -53,8 +55,6 @@ class Sched_Obj:
         self.__INSTAPUSH_NOTIF_IP   = self.__xml.get_instapush_notif_ip ()
         self.__INSTAPUSH_NOTIF_PORT = self.__xml.get_instapush_notif_port ()
         self.__INSTAPUSH_NOTIF_ADDR = (self.__INSTAPUSH_NOTIF_IP, self.__INSTAPUSH_NOTIF_PORT)
-
-        udp_send_sock.sendto ('Test message from init', self.__INSTAPUSH_NOTIF_ADDR)
 
         self.__min_gap_between_two_instapush_notif = self.__xml.min_gap_between_two_instapush_notif ()
         # Record the timestamp when the last instapush notification was sent
