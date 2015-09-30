@@ -165,7 +165,7 @@ class Sched_Obj:
     def schedule_instapush_notif_timeout (self, instapush_notif_timeout = 20):
         instapush_notif_timeout = self.__xml.get_instapush_notif_timeout ()
         self.__instapush_notif_timeout_job = self.__sched.add_job(self.send_instapush_notif, 'interval', 
-                                                  seconds = instapush_notif_timeout, ['Someone at the door'])
+                                                  seconds=instapush_notif_timeout, args=['Someone at the door'])
         log.print_high ('Scheduled instapush_notif_timeout for ' + str (instapush_notif_timeout) + 's')
         return
 
