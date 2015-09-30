@@ -58,7 +58,7 @@ class Sensors(object):
                                   GPIO.FALLING,
                                   callback=self.__inside_PIR_triggered_callback,
                                   bouncetime=300)
-        log.print_high ('InsidePIRInterrupt: Added a FALLING edge event')
+        log.print_high ('InsidePIRInterrupt: Added a FALLING edge event (GPIO ' + str (self.__pir_inside_gpio) + ')' )
 
 
     def enable_OutsidePIRInterrupt(self,callback=None):
@@ -66,14 +66,14 @@ class Sensors(object):
                                   GPIO.FALLING,
                                   callback=self.__outside_PIR_triggered_callback,
                                   bouncetime=300)
-        log.print_high ('InsidePIRInterrupt: Added a RISING edge event')
+        log.print_high ('OutsidePIRInterrupt: Added a FALLING edge event (GPIO ' + str (self.__pir_outside_gpio) + ')' )
 
     def enable_DoorSwitchInterrupt(self,callback=None):
         GPIO.add_event_detect(self.__door_switch_gpio,
                                   GPIO.FALLING,
                                   callback=self.__outside_PIR_triggered_callback,
                                   bouncetime=500)
-        log.print_high ('InsidePIRInterrupt: Added a FALLING edge event')
+        log.print_high ('DoorSwitchInterrupt: Added a FALLING edge event (GPIO ' + str (self.__door_switch_gpio) + ')' )
         
         
     def disable_InsidePIRInterrupt (self, callback=None):
