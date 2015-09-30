@@ -10,7 +10,7 @@ from socket      import *
 from time        import sleep
 from xml_handler import XML_Object
 from logger      import log_handler
-from   apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 
 #=========================================================================#
 #-------------------------------- INIT -----------------------------------#

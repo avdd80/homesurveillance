@@ -20,13 +20,9 @@ log.set_log_level (log.LOG_LEVEL_LOW)
 # For APScheduler > 3.0.0
 logging.basicConfig()
 
-
-udp_send_sock.sendto ('Test message from start', ('localhost', 30001))
-
 def get_elapsed_seconds_since (timestamp):
     current_time = datetime.datetime.now ()
     return int ((current_time - timestamp).total_seconds())
-    
 
 class Sched_Obj:
 
@@ -55,6 +51,7 @@ class Sched_Obj:
         self.__INSTAPUSH_NOTIF_IP   = self.__xml.get_instapush_notif_ip ()
         self.__INSTAPUSH_NOTIF_PORT = self.__xml.get_instapush_notif_port ()
         self.__INSTAPUSH_NOTIF_ADDR = (self.__INSTAPUSH_NOTIF_IP, self.__INSTAPUSH_NOTIF_PORT)
+        self.__udp_send_sock        = socket(AF_INET, SOCK_DGRAM)
 
         self.__min_gap_between_two_instapush_notif = self.__xml.min_gap_between_two_instapush_notif ()
         # Record the timestamp when the last instapush notification was sent
@@ -152,7 +149,7 @@ class Sched_Obj:
         if ( (self.__outside_PIR_interrupt_count > self.__xml.get_instapush_notif_interrupt_count()) and 
              (self.how_long_ago_was_last_instapush_notif_sent () > self.__min_gap_between_two_instapush_notif) ):
             log.print_high ('Will send a notif now')
-            udp_send_sock.sendto (notif_message, self.__INSTAPUSH_NOTIF_ADDR)
+            self.__udp_send_sock.sendto (notif_message, self.__INSTAPUSH_NOTIF_ADDR)
             self.__last_instapush_notif_sent_at = datetime.datetime.now ()
         else:
             log.print_high ('No notif. Last notif sent ' + str (self.how_long_ago_was_last_instapush_notif_sent ()) 
