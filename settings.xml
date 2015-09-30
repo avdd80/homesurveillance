@@ -59,7 +59,7 @@
     </path>
     <gpio_assignments>
         <inside_pir>5</inside_pir>
-        <outside_pir>0</outside_pir>
+        <outside_pir>17</outside_pir>
         <door_switch>6</door_switch>
     </gpio_assignments>
     <timings>
