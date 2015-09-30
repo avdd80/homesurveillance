@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # job_scheduler.py
 # Responsible for scheduling all the importants jobs
+from   socket      import *
 import sys
 import logging
 import time, datetime
-from   socket      import *
 from   xml_handler import XML_Object
 from   logger      import log_handler
 from   pitftscreen import PiTFT_Screen
@@ -21,7 +21,7 @@ log.set_log_level (log.LOG_LEVEL_LOW)
 logging.basicConfig()
 
 
-udp_send_sock.sendto ('Test message from start', (self.__xml.get_instapush_notif_ip (), self.__xml.get_instapush_notif_port ()))
+udp_send_sock.sendto ('Test message from start', ('localhost', 30001))
 
 def get_elapsed_seconds_since (timestamp):
     current_time = datetime.datetime.now ()
