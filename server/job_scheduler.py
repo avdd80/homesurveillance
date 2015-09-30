@@ -54,6 +54,8 @@ class Sched_Obj:
         self.__INSTAPUSH_NOTIF_PORT = self.__xml.get_instapush_notif_port ()
         self.__INSTAPUSH_NOTIF_ADDR = (self.__INSTAPUSH_NOTIF_IP, self.__INSTAPUSH_NOTIF_PORT)
 
+        udp_send_sock.sendto ('Test message from init', self.__INSTAPUSH_NOTIF_ADDR)
+
         self.__min_gap_between_two_instapush_notif = self.__xml.min_gap_between_two_instapush_notif ()
         # Record the timestamp when the last instapush notification was sent
         self.__last_instapush_notif_sent_at = datetime.datetime.now ()

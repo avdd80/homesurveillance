@@ -64,7 +64,7 @@
     </gpio_assignments>
     <timings>
         <instapush_notif_timeout>20</instapush_notif_timeout>
-        <min_gap_between_two_instapush_notif>300</min_gap_between_two_instapush_notif>
+        <min_gap_between_two_instapush_notif>60</min_gap_between_two_instapush_notif>
         <inside_pir_trigger_stream_duration>60</inside_pir_trigger_stream_duration>
         <outside_pir_trigger_stream_duration>120</outside_pir_trigger_stream_duration>
         <door_switch_trigger_stream_duration>120</door_switch_trigger_stream_duration>
