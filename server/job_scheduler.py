@@ -80,7 +80,7 @@ class Sched_Obj:
 
         # Create a dummy job and cancel it
         
-        self.__stream_job = self.__sched.add_job(self.stop_streaming_cb, 'interval', seconds = 5)
+        self.__stream_job = self.__sched.add_job(self.stop_streaming_cb, 'interval', seconds = 5, args=['Dummy message'])
         self.__stream_job.remove ()
 
         log.print_high ('Scheduler init done')
