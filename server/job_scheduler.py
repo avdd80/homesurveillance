@@ -20,6 +20,12 @@ log.set_log_level (log.LOG_LEVEL_LOW)
 # For APScheduler > 3.0.0
 logging.basicConfig()
 
+
+def get_elapsed_seconds_since (timestamp):
+    current_time = datetime.datetime.now ()
+    return int ((timestamp - current_time).total_seconds())
+    
+
 class Sched_Obj:
 
 #=========================================================================#
@@ -55,7 +61,7 @@ class Sched_Obj:
         self.__is_stream_job_running        = False
         self.__outside_PIR_interrupt_count  = 0
         
-        self.__instapush_notif_timeout_job= self.__sched.add_job(self.instapush_notif_timeout_cb, 'interval', seconds = 5)
+        self.__instapush_notif_timeout_job= self.__sched.add_job(self.instapush_notif_timeout, 'interval', seconds = 5)
         self.__instapush_notif_timeout_job.remove ()
 
 #-------------------------------------------------------------------------#
@@ -79,29 +85,64 @@ class Sched_Obj:
 
         log.print_high ('Scheduler init done')
         
+#-------------------------------------------------------------------------#
+#---------------------------- INTERRUPTS INIT ----------------------------#
+#-------------------------------------------------------------------------#
+
+        self.__last_inside_pir_interrupt_triggered_at  = datetime.datetime.now ()
+        self.__last_outside_pir_interrupt_triggered_at = datetime.datetime.now ()
+        self.__last_door_switch_interrupt_triggered_at = datetime.datetime.now ()
+        
+
 #=========================================================================#
 #------------------------------ INIT END ---------------------------------#
 #=========================================================================#
 
-#=========================================================================#
+
+#-------------------------------------------------------------------------#
+#-------------------- INTERRUPT TRIGGERED FUNCTIONS  ---------------------#
+#-------------------------------------------------------------------------#
+
+    def update_inside_pir_interrupt_timestamp (self):
+        self.__last_inside_pir_interrupt_triggered_at  = datetime.datetime.now ()
+        
+    def how_long_ago_was_last_inside_pir_interrupt_triggered (self):
+        return get_elapsed_seconds_since (self.__last_inside_pir_interrupt_triggered_at)
+        
+#-------------------------------------------------------------------------#
+        
+    def update_outside_pir_interrupt_timestamp (self):
+        self.__last_outside_pir_interrupt_triggered_at = datetime.datetime.now ()
+        
+    def how_long_ago_was_last_inside_pir_interrupt_triggered (self):
+        return get_elapsed_seconds_since (self.__last_outside_pir_interrupt_triggered_at)
+
+#-------------------------------------------------------------------------#
+        
+    def update_door_switch_interrupt_timestamp (self):
+        self.__last_door_switch_interrupt_triggered_at = datetime.datetime.now ()
+        
+    def how_long_ago_was_last_inside_pir_interrupt_triggered (self):
+        return get_elapsed_seconds_since (self.__last_door_switch_interrupt_triggered_at)
+
+#-------------------------------------------------------------------------#
 #---------------------- INSTAPUSH NOTIFICATION HANDLER -------------------#
-#=========================================================================#
+#-------------------------------------------------------------------------#
 
     def how_long_ago_was_last_instapush_notif_sent (self):
-        current_time = datetime.datetime.now ()
-        diff = self.__last_instapush_notif_sent_at - current_time
-        return int (diff.total_seconds())
+        return get_elapsed_seconds_since (self.__last_instapush_notif_sent_at)
+
 #-------------------------------------------------------------------------#
     # Send an instapush notification if we get more than 
     # 2 interrupts (reconfigurable) during the timout (also reconfigurable)
     # To avoid flooding notifications, allow a minimum gap between two 
     # notifications. Currently set to 5 minutes (reconfigurable)
     
-    def instapush_notif_timeout_cb (self):
+    def send_instapush_notif (self, notif_message):
         # Remove the interval job
         self.__instapush_notif_timeout_job.remove ()
         
-        log.print_high ('instapush_notif_timeout_fb triggered')
+        log.print_high ('send_instapush_notif triggered')
         
         # Check the interrupt count during the timeout. If greater than the
         # threshold, send a notification.
@@ -109,7 +150,7 @@ class Sched_Obj:
         if ( (self.__outside_PIR_interrupt_count > self.__xml.get_instapush_notif_interrupt_count()) and 
               (self.how_long_ago_was_last_instapush_notif_sent () > self.__min_gap_between_two_instapush_notif ()) ):
             log.print_high ('Will send a notif now')
-            udp_send_sock.sendto ('Someone outside your door', self.__INSTAPUSH_NOTIF_ADDR)
+            udp_send_sock.sendto (notif_message, self.__INSTAPUSH_NOTIF_ADDR)
             self.__last_instapush_notif_sent_at = datetime.datetime.now ()
         else:
             log.print_high ('No notif. Last notif sent ' + str (self.how_long_ago_was_last_instapush_notif_sent ()) 
@@ -119,13 +160,26 @@ class Sched_Obj:
         self.__outside_PIR_interrupt_count = 0
         return
 #-------------------------------------------------------------------------#
-    # Count the number of interrupts in 20 seconds (reconfigurable)
+    # Count the number of interrupts in 20 seconds (reconfigurable) to ensure a
+    # person is standing outside the door
     def schedule_instapush_notif_timeout (self, instapush_notif_timeout = 20):
         instapush_notif_timeout = self.__xml.get_instapush_notif_timeout ()
-        self.__instapush_notif_timeout_job = self.__sched.add_job(self.instapush_notif_timeout_cb, 'interval', seconds = instapush_notif_timeout)
+        self.__instapush_notif_timeout_job = self.__sched.add_job(self.send_instapush_notif, 'interval', 
+                                                  seconds = instapush_notif_timeout, ['Someone at the door'])
         log.print_high ('Scheduled instapush_notif_timeout for ' + str (instapush_notif_timeout) + 's')
         return
+
 #-------------------------------------------------------------------------#
+        
+    def check_if_door_opened_from_outside_and_send_notif (self):
+        # Check if someone was recently inside the house, behind the door
+        if (self.how_long_ago_was_last_inside_pir_interrupt_triggered () > xml.inside_home_presence_timeout()):
+            # If no one was inside the house and door was opened, send a notification
+            self.send_instapush_notif ('Door opened')
+        
+
+#-------------------------------------------------------------------------#
+
     # Increment interrupt count and start a timer
     def increment_outside_PIR_interrupt_count (self):
         if (self.__outside_PIR_interrupt_count == 0):
@@ -138,19 +192,18 @@ class Sched_Obj:
 #------------------------------ STREAM HANDLER ---------------------------#
 #-------------------------------------------------------------------------#
 
-    def is_stream_running (self):
-        return (self.__is_stream_job_running)
-#-------------------------------------------------------------------------#
     # Implemented as a callback function
     def start_streaming_cb (self):
-        log.print_high ('Starting camera...')
-        if (self.__cam.start_camera ('320x240', '5', 'night')):
-            self.__pitft.Backlight (True)
-            log.print_high ('scheduler: Starting stream_video_to_display...')
-            self.__pitft.stream_video_to_display ()
-        else:
-            log.print_high ('scheduler: Camera already on')
-        self.__is_stream_job_running = True
+        if (not self.__is_stream_job_running):
+            log.print_high ('Starting camera...')
+            if (self.__cam.start_camera ('320x240', '5', 'night')):
+                self.__pitft.Backlight (True)
+                log.print_high ('scheduler: Starting stream_video_to_display...')
+                self.__pitft.stream_video_to_display ()
+            else:
+                log.print_high ('scheduler: Camera already on')
+            self.__is_stream_job_running = True
+         return
 #-------------------------------------------------------------------------#
     # Turns off camera streaming. 
     # Turns off local display

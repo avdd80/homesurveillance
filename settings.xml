@@ -5,41 +5,45 @@
             <ip>192.168.1.2</ip>
             <port>8080</port>
         </remote_cam_server_tcp>
+        <remote_command_server_tcp>
+            <ip>192.168.1.2</ip>
+            <port>30000</port>
+        </remote_command_server_tcp>
         <instapush_notif_udp>
             <ip>localhost</ip>
-            <port>30000</port>
+            <port>30001</port>
         </instapush_notif_udp>
         <display_stream_launcher_udp>
             <ip>localhost</ip>
-            <port>30001</port>
+            <port>30002</port>
         </display_stream_launcher_udp>
         <job_scheduler_udp>
             <ip>localhost</ip>
-            <port>30002</port>
+            <port>30003</port>
         </job_scheduler_udp>
         <placeholder1>
             <ip></ip>
-            <port>30003</port>
+            <port>30004</port>
         </placeholder1>
         <placeholder2>
             <ip></ip>
-            <port>30004</port>
+            <port>30005</port>
         </placeholder2>
         <placeholder3>
             <ip></ip>
-            <port>30005</port>
+            <port>30006</port>
         </placeholder3>
         <placeholder4>
             <ip></ip>
-            <port>30006</port>
+            <port>30007</port>
         </placeholder4>
         <placeholder5>
             <ip></ip>
-            <port>30007</port>
+            <port>30008</port>
         </placeholder5>
         <placeholder6>
             <ip></ip>
-            <port>30007</port>
+            <port>30009</port>
         </placeholder6>
         <clients>
             <client0_listener_udp_address>
@@ -54,13 +58,17 @@
         <mjpeg_streamer>/usr/src/mjpg-streamer/mjpg-streamer-experimental/mjpg_streamer</mjpeg_streamer>
     </path>
     <gpio_assignments>
-        <inside_pir>4</inside_pir>
-        <outside_pir>5</outside_pir>
+        <inside_pir>5</inside_pir>
+        <outside_pir>0</outside_pir>
         <door_switch>6</door_switch>
     </gpio_assignments>
     <timings>
         <instapush_notif_timeout>20</instapush_notif_timeout>
         <min_gap_between_two_instapush_notif>300</min_gap_between_two_instapush_notif>
+        <inside_pir_trigger_stream_duration>60</inside_pir_trigger_stream_duration>
+        <outside_pir_trigger_stream_duration>120</outside_pir_trigger_stream_duration>
+        <door_switch_trigger_stream_duration>120</door_switch_trigger_stream_duration>
+        <inside_home_presence_timeout>20</inside_home_presence_timeout>
     </timings>
     <root_placeholder3>
     </root_placeholder3>

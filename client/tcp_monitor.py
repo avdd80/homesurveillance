@@ -14,8 +14,8 @@ log.set_log_level (log.LOG_LEVEL_LOW)
 
 xml = XML_Object ()
 
-REMOTE_TCP_IP_ADDR = xml.get_cam_server_ip ()
-REMOTE_TCP_IP_PORT = xml.get_cam_server_port ()
+REMOTE_TCP_IP_ADDR = xml.get_remote_cam_server_ip ()
+REMOTE_TCP_IP_PORT = xml.get_remote_cam_server_port ()
 
 DISPLAY_STREAM_LAUNCHER_IP   = xml.get_display_stream_launcher_ip ()
 DISPLAY_STREAM_LAUNCHER_PORT = xml.get_display_stream_launcher_port ()

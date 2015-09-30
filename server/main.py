@@ -3,7 +3,6 @@
 # Python script to co-ordinate the sensors and actions
 # ------------------------------------------------------------------------
 
-from socket        import *
 from time          import sleep
 from sensors       import Sensors
 from xml_handler   import XML_Object
@@ -16,10 +15,10 @@ from job_scheduler import Sched_Obj
 
 xml = XML_Object ()
 
-INSTAPUSH_NOTIF_HOST = xml.get_instapush_notif_ip ()
-INSTAPUSH_NOTIF_PORT = xml.get_instapush_notif_port ()
-INSTAPUSH_NOTIF_ADDR = (INSTAPUSH_NOTIF_HOST, INSTAPUSH_NOTIF_PORT)
-udp_send_sock        = socket(AF_INET, SOCK_DGRAM)
+
+INSIDE_PIR_STREAM_DURATION  = xml.inside_pir_trigger_stream_duration ()
+OUTSIDE_PIR_STREAM_DURATION = xml.outside_pir_trigger_stream_duration ()
+DOOR_SWITCH_STREAM_DURATION = xml.door_switch_trigger_stream_duration ()
 
 del xml
 
@@ -39,43 +38,42 @@ scheduler_obj = Sched_Obj ()
 
 
 def inside_pir_triggered_callback_func (channel):
+    scheduler_obj.update_inside_pir_interrupt_timestamp ()
 
-    scheduler_obj.increment_outside_PIR_interrupt_count ()
-    # Make the ISR (kind of) atomic by disallowing nested interrupts to process
-    if (scheduler_obj.is_stream_running ()):
-        log.print_high ('Nested inside_pir_triggered_callback triggered. Returning')
-        return
-    else:
-        # CRITICAL SECTION
-        log.print_high ('inside_pir_triggered_callback triggered')
-        udp_send_sock.sendto ('You are in front of the door', INSTAPUSH_NOTIF_ADDR)
-        scheduler_obj.schedule_start_streaming ()
-        scheduler_obj.schedule_stop_streaming (40)
-        log.print_high ('exiting inside_pir_triggered_callback')
+    log.print_high ('inside_pir_triggered_callback triggered')
+    scheduler_obj.schedule_start_streaming ()
+    scheduler_obj.schedule_stop_streaming (INSIDE_PIR_STREAM_DURATION)
+
+    log.print_high ('exiting inside_pir_triggered_callback')
     return
 
 #-------------------------------------------------------------------------#
 
 
 def outside_pir_triggered_callback_func(channel):
+
+    # This function also schedules an instapush notification to be sent
+    scheduler_obj.increment_outside_PIR_interrupt_count ()
+    scheduler_obj.update_outside_pir_interrupt_timestamp ()
+
     log.print_high ('outside_pir_triggered_callback triggered')
+    scheduler_obj.schedule_start_streaming ()
+    scheduler_obj.schedule_stop_streaming (OUTSIDE_PIR_STREAM_DURATION)
+    log.print_high ('exiting outside_pir_triggered_callback')
     return
 
 #-------------------------------------------------------------------------#
 
 def door_switch_triggered_callback_func(channel):
-    log.print_high ('door_switch_triggered_callback triggered')
-    udp_send_sock.sendto ('Door opened', INSTAPUSH_NOTIF_ADDR)
-    #cam.start_camera ('320x240', '5', 'night')
-    #pitft.Backlight (True)
-    #pitft.stream_video_to_display ()
 
-    # TODO: implement as a retriggered scheduler
-    sleep (120)
-    #pitft.stop_stream_video_to_display ()
-    #pitft.Backlight (False)
-    #cam.stop_camera ()
-    log.print_high ('exiting door_switch_triggered_callback triggered')
+    scheduler_obj.update_door_switch_interrupt_timestamp ()
+    scheduler_obj.check_if_door_opened_from_outside_and_send_notif ()
+
+    log.print_high ('door_switch_triggered_callback triggered')
+    scheduler_obj.schedule_start_streaming ()
+    scheduler_obj.schedule_stop_streaming (DOOR_SWITCH_STREAM_DURATION)
+
+    log.print_high ('exiting door_switch_triggered_callback_func')
     return
     
 #=========================================================================#

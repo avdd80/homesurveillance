@@ -10,6 +10,7 @@ from socket      import *
 from time        import sleep
 from xml_handler import XML_Object
 from logger      import log_handler
+from   apscheduler.schedulers.background import BackgroundScheduler
 
 #=========================================================================#
 #-------------------------------- INIT -----------------------------------#
@@ -36,6 +37,10 @@ DISPLAY_STREAM_LAUNCHER_PORT = xml.get_display_stream_launcher_port ()
 DISPLAY_STREAM_LAUNCHER_ADDR = (DISPLAY_STREAM_LAUNCHER_IP, DISPLAY_STREAM_LAUNCHER_PORT)
 del xml
 
+# Create a scheduler to implement a dog timer.
+sched = BackgroundScheduler()
+sched.start()        # start the scheduler
+
 #=========================================================================#
 #------------------------------ INIT END ---------------------------------#
 #=========================================================================#
@@ -55,6 +60,10 @@ while True:
         udp_send_sock.sendto ('LISTEN_TO_STREAM', DISPLAY_STREAM_LAUNCHER_ADDR)
         Popen ('sudo fbi -T 2 -d /dev/fb0 -noverbose -a ../images/rpi_cam_splash_800x480.png', shell=True, stdout=PIPE)
         log.print_high ('early_server_monitor: Sent LISTEN_TO_STREAM')
+        
+    elif (data == 'STOP_LISTENING_TO_STREAM'):
+        udp_send_sock.sendto ('STOP_LISTENING_TO_STREAM', DISPLAY_STREAM_LAUNCHER_ADDR)
+        log.print_high ('early_server_monitor: Sent STOP_LISTENING_TO_STREAM')
 
     # Sleep for 5 seconds to avoid receiving multiple UDP messages
     # The UDP server DOES send multiple UDP messages
