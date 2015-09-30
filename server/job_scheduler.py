@@ -61,7 +61,7 @@ class Sched_Obj:
         self.__is_stream_job_running        = False
         self.__outside_PIR_interrupt_count  = 0
         
-        self.__instapush_notif_timeout_job  = self.__sched.add_job(self.send_instapush_notif, 'interval', seconds = 5)
+        self.__instapush_notif_timeout_job  = self.__sched.add_job(self.send_instapush_notif, 'interval', seconds = 5, args=['Dummy message'])
         self.__instapush_notif_timeout_job.remove ()
 
 #-------------------------------------------------------------------------#
@@ -80,7 +80,7 @@ class Sched_Obj:
 
         # Create a dummy job and cancel it
         
-        self.__stream_job = self.__sched.add_job(self.stop_streaming_cb, 'interval', seconds = 5, args=['Dummy message'])
+        self.__stream_job = self.__sched.add_job(self.stop_streaming_cb, 'interval', seconds = 5)
         self.__stream_job.remove ()
 
         log.print_high ('Scheduler init done')
