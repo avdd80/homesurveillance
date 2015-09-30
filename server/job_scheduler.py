@@ -61,7 +61,7 @@ class Sched_Obj:
         self.__is_stream_job_running        = False
         self.__outside_PIR_interrupt_count  = 0
         
-        self.__instapush_notif_timeout_job= self.__sched.add_job(self.instapush_notif_timeout, 'interval', seconds = 5)
+        self.__instapush_notif_timeout_job  = self.__sched.add_job(self.send_instapush_notif, 'interval', seconds = 5)
         self.__instapush_notif_timeout_job.remove ()
 
 #-------------------------------------------------------------------------#
@@ -243,7 +243,3 @@ class Sched_Obj:
 #=========================================================================#
 #--------------------------------- END -----------------------------------#
 #=========================================================================#
-
-scheduler_obj = Sched_Obj ()
-
-scheduler_obj.send_instapush_notif('Message')
