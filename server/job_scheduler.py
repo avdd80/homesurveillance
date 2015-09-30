@@ -148,7 +148,7 @@ class Sched_Obj:
         # threshold, send a notification.
         # Also check when the last notification was sent. 
         if ( (self.__outside_PIR_interrupt_count > self.__xml.get_instapush_notif_interrupt_count()) and 
-              (self.how_long_ago_was_last_instapush_notif_sent () > self.__min_gap_between_two_instapush_notif ()) ):
+             (self.how_long_ago_was_last_instapush_notif_sent () > self.__min_gap_between_two_instapush_notif ()) ):
             log.print_high ('Will send a notif now')
             udp_send_sock.sendto (notif_message, self.__INSTAPUSH_NOTIF_ADDR)
             self.__last_instapush_notif_sent_at = datetime.datetime.now ()
@@ -243,3 +243,7 @@ class Sched_Obj:
 #=========================================================================#
 #--------------------------------- END -----------------------------------#
 #=========================================================================#
+
+scheduler_obj = Sched_Obj ()
+
+scheduler_obj.send_instapush_notif('Message')
