@@ -203,7 +203,7 @@ class Sched_Obj:
             else:
                 log.print_high ('scheduler: Camera already on')
             self.__is_stream_job_running = True
-         return
+        return
 #-------------------------------------------------------------------------#
     # Turns off camera streaming. 
     # Turns off local display
