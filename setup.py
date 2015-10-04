@@ -1,29 +1,26 @@
 #!/usr/bin/env python
 # setup.py
 
-from os         import system
+from os         import system, getcwd
 from subprocess import Popen, PIPE
 
+working_dir = getcwd ()
+
 # Make all scripts executable
-system ('sudo chmod +x scripts/*')
-system ('sudo chmod +x scripts/*')
+system ('sudo chmod +x ' + working_dir + '/scripts/*')
 
 # Make all python scripts executable
-system ('sudo chmod +x server/instapush_notif.py')
-system ('sudo chmod +x server/main.py')
+# Server
+system ('sudo chmod +x ' + working_dir + '/server/instapush_notif.py')
+system ('sudo chmod +x ' + working_dir + '/server/main.py')
 
-system ('sudo chmod +x client/display_stream_launcher.py')
-system ('sudo chmod +x client/tcp_monitor.py')
-system ('sudo chmod +x client/early_server_monitor.py')
+# Client
+system ('sudo chmod +x ' + working_dir + '/client/display_stream_launcher.py')
+system ('sudo chmod +x ' + working_dir + '/client/tcp_monitor.py')
+system ('sudo chmod +x ' + working_dir + '/client/early_server_monitor.py')
 
-# Make autostart scripts executable
-system ('sudo chmod +x scripts/instapush_notif.desktop')
-system ('sudo chmod +x scripts/main.desktop')
-
-system ('sudo mkdir                              /home/pi/.config/autostart')
-system ('sudo mv scripts/instapush_notif.desktop /home/pi/.config/autostart/.')
-system ('sudo mv scripts/main.desktop            /home/pi/.config/autostart/.')
-
+# Create startup script
+system ('sudo ln -s '    + working_dir + '/scripts/server_batch_launcher.sh /etc/init.d/server_batch_launcher.sh')
 
 # Set the correct timezone
 system ('sudo ln -sf /usr/share/zoneinfo/America/Los_Angeles /etc/localtime')
