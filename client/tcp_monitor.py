@@ -26,6 +26,9 @@ del xml
 udp_send_sock = socket(AF_INET, SOCK_DGRAM)
 is_stream_running = False
 
+# Wait for display stream launcher to start first
+sleep (10)
+
 
 # Monitor process
 def monitor_tcp_port ():
