@@ -58,9 +58,9 @@
         <mjpeg_streamer>/usr/src/mjpg-streamer/mjpg-streamer-experimental/mjpg_streamer</mjpeg_streamer>
     </path>
     <gpio_assignments>
-        <inside_pir>5</inside_pir>
-        <outside_pir>17</outside_pir>
-        <door_switch>6</door_switch>
+        <inside_pir>17</inside_pir>
+        <outside_pir>22</outside_pir>
+        <door_switch>27</door_switch>
     </gpio_assignments>
     <timings>
         <instapush_notif_timeout>20</instapush_notif_timeout>
