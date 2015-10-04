@@ -38,6 +38,9 @@ DISPLAY_STREAM_LAUNCHER_PORT = xml.get_display_stream_launcher_port ()
 DISPLAY_STREAM_LAUNCHER_ADDR = (DISPLAY_STREAM_LAUNCHER_IP, DISPLAY_STREAM_LAUNCHER_PORT)
 del xml
 
+# Wait for display stream launcher to start first
+sleep (10)
+
 # Create a scheduler to implement a dog timer.
 sched = BackgroundScheduler()
 sched.start()        # start the scheduler
