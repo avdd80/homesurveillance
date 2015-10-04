@@ -40,7 +40,7 @@ def monitor_tcp_port ():
     i = 100
     # If the TCP port is open, send a UDP message locally to start listening to the stream
     if (int (stdout) == 0):
-        log.print_high ('TCP Port opened')
+        #log.print_high ('TCP Port opened')
         is_tcp_port_open = True
     else:
         if (i == 0):
