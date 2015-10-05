@@ -23,7 +23,11 @@ class XML_Object(object):
         self.__clients_node = self.__address_node
         self.__misc_node    = self.__root[5]
         
-        self.set_root_dir_path ()
+        # Initialize the directories in XML only during the first
+        # initialization
+        if (not self.get_xml_init_status ()):
+            self.set_root_dir_path ()
+            self.set_xml_init_status ('1')
 
 #------------------------------------------------------#
 #--------------------- ADDRESSES ----------------------#
@@ -133,6 +137,13 @@ class XML_Object(object):
 #------------------------------------------------------#
     def get_instapush_notif_interrupt_count (self):
         return int (self.__misc_node[1].text)
+#------------------------------------------------------#
+    def get_xml_init_status (self):
+        return int (self.__misc_node[2].text)
+#------------------------------------------------------#
+    def set_xml_init_status (self, status):
+        self.__misc_node[2].text = status
+        self.__tree.write (self.__xml_path)
 #------------------------------------------------------#
 #------------------------------------------------------#
 #------------------------------------------------------#

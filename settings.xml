@@ -78,5 +78,6 @@
     <misc>
         <client_count>1</client_count>
         <instapush_notif_interrupt_count>1</instapush_notif_interrupt_count>
+        <is_xml_init_done>0</is_xml_init_done>
     </misc>
 </data>

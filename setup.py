@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # setup.py
 
-from os         import system, getcwd
-from subprocess import Popen, PIPE
+from os          import system, getcwd
+from subprocess  import Popen, PIPE
+from xml_handler import XML_Object
 
 working_dir = getcwd ()
 
