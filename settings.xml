@@ -54,6 +54,7 @@
         </clients>
     </addresses>
     <path>
+        <root_dir_path></root_dir_path>
         <mjpeg_streamer_root_path>/usr/src/mjpg-streamer/mjpg-streamer-experimental/</mjpeg_streamer_root_path>
         <mjpeg_streamer>/usr/src/mjpg-streamer/mjpg-streamer-experimental/mjpg_streamer</mjpeg_streamer>
     </path>
