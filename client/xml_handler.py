@@ -4,12 +4,16 @@
 # XML settings file handler
 # -----------------------------------------------------#
 import xml.etree.ElementTree as ET
+import os
 
 class XML_Object(object):
 
     def __init__(self):
-    
-        self.__xml_path     = '../settings.xml'
+        self.__pwd          = os.getcwd ()
+        self.__root_dir     = os.path.dirname(self.__pwd)
+        self.__server_dir   = os.path.dirname(self.__pwd) + '/server'
+        self.__client_dir   = os.path.dirname(self.__pwd) + '/client'
+        self.__xml_path     = self.__root_dir + '/settings.xml'
         self.__tree         = ET.parse (self.__xml_path)
         self.__root         = self.__tree.getroot ()
         self.__address_node = self.__root[0]
@@ -18,6 +22,8 @@ class XML_Object(object):
         self.__timings_node = self.__root[3]
         self.__clients_node = self.__address_node
         self.__misc_node    = self.__root[5]
+        
+        self.set_root_dir_path ()
 
 #------------------------------------------------------#
 #--------------------- ADDRESSES ----------------------#
@@ -130,8 +136,32 @@ class XML_Object(object):
 #------------------------------------------------------#
 #------------------------------------------------------#
 #------------------------------------------------------#
-#----------------------- PATHS ------------------------
+#----------------------- PATHS ------------------------#
+#------------------------------------------------------#
+    def set_root_dir_path (self):
+        self.__path_node[0].text = self.__root_dir
+        self.__tree.write (self.__xml_path)
+        return
+#------------------------------------------------------#
+    def get_root_dir_path (self):
+        return self.__path_node[0].text
+#------------------------------------------------------#
+    def set_server_dir_path (self):
+        self.__path_node[1].text = self.__server_dir
+        self.__tree.write (self.__xml_path)
+        return
+#------------------------------------------------------#
+    def get_server_dir_path (self):
+        return self.__path_node[1].text
+#------------------------------------------------------#
+    def set_client_dir_path (self):
+        self.__path_node[2].text = self.__client_dir
+        self.__tree.write (self.__xml_path)
+        return
+#------------------------------------------------------#
+    def get_client_dir_path (self):
+        return self.__path_node[2].text
 #------------------------------------------------------#
     def get_mjpg_streamer_path (self):
-        return self.__path_node[0].text
+        return self.__path_node[3].text
 #------------------------------------------------------#

@@ -11,7 +11,9 @@ class XML_Object(object):
     def __init__(self):
         self.__pwd          = os.getcwd ()
         self.__root_dir     = os.path.dirname(self.__pwd)
-        self.__xml_path     = self.__pwd + '/settings.xml'
+        self.__server_dir   = os.path.dirname(self.__pwd) + '/server'
+        self.__client_dir   = os.path.dirname(self.__pwd) + '/client'
+        self.__xml_path     = self.__root_dir + '/settings.xml'
         self.__tree         = ET.parse (self.__xml_path)
         self.__root         = self.__tree.getroot ()
         self.__address_node = self.__root[0]
@@ -134,17 +136,32 @@ class XML_Object(object):
 #------------------------------------------------------#
 #------------------------------------------------------#
 #------------------------------------------------------#
-#----------------------- PATHS ------------------------
+#----------------------- PATHS ------------------------#
 #------------------------------------------------------#
     def set_root_dir_path (self):
-        self.__path_node[0].set (self.__root_dir)
+        self.__path_node[0].text = self.__root_dir
         self.__tree.write (self.__xml_path)
-        print 'Set root path ' + self.__xml_path
         return
 #------------------------------------------------------#
     def get_root_dir_path (self):
         return self.__path_node[0].text
 #------------------------------------------------------#
-    def get_mjpg_streamer_path (self):
+    def set_server_dir_path (self):
+        self.__path_node[1].text = self.__server_dir
+        self.__tree.write (self.__xml_path)
+        return
+#------------------------------------------------------#
+    def get_server_dir_path (self):
         return self.__path_node[1].text
+#------------------------------------------------------#
+    def set_client_dir_path (self):
+        self.__path_node[2].text = self.__client_dir
+        self.__tree.write (self.__xml_path)
+        return
+#------------------------------------------------------#
+    def get_client_dir_path (self):
+        return self.__path_node[2].text
+#------------------------------------------------------#
+    def get_mjpg_streamer_path (self):
+        return self.__path_node[3].text
 #------------------------------------------------------#
