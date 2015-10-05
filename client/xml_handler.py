@@ -27,6 +27,8 @@ class XML_Object(object):
         # initialization
         if (not self.get_xml_init_status ()):
             self.set_root_dir_path ()
+            self.set_server_dir_path ()
+            self.set_client_dir_path ()
             self.set_xml_init_status ('1')
 
 #------------------------------------------------------#
